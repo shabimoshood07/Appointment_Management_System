@@ -8,7 +8,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as any,
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -21,9 +21,9 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("user", user);
-      console.log("account", account);
-      console.log("profile", profile);
+      // console.log("user", user);
+      // console.log("account", account);
+      // console.log("profile", profile);
 
       return true;
     },
