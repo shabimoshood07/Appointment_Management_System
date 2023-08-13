@@ -4,10 +4,10 @@ import { signIn } from "next-auth/react";
 const AuthBtnMobileNav = () => {
   return (
     <MenubarItem
-      className="cursor-pointer font-bold text-center block  hover:!bg-green-500"
+      className="cursor-pointer font-bold text-center block  hover:!bg-green-800 hover:!text-slate-300"
       onClick={() => signIn()}
     >
-      Login / Signup
+      Sign in / Sign up
     </MenubarItem>
   );
 };

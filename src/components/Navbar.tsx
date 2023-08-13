@@ -20,6 +20,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import AuthBtnDesktopNav from "./AuthBtnDesktopNav";
+import LogoutBtnDesktopNav from "./LogoutBtnDesktopNav";
+import { navlinks } from "@/lib/navlinks";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -35,7 +38,7 @@ const Navbar = async () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-8 h-8 md:w-10 md:h-10 text-green-950 cursor-pointer"
+            className="w-8 h-8 md:w-9 md:h-9 text-green-950 cursor-pointer"
           >
             <path
               strokeLinecap="round"
@@ -67,94 +70,40 @@ const Navbar = async () => {
               </MenubarTrigger>
               {session ? (
                 <MenubarContent className="ml-[-9rem]  md:!hidden">
-                  <MenubarItem className="cursor-pointer hover:!bg-green-500">
-                    Profile
-                    <MenubarShortcut>
-                      {session?.user.image ? (
-                        <Image
-                          src={session?.user.image}
-                          height={25}
-                          width={25}
-                          className="rounded-full"
-                        />
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6 text-green-950"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                      )}
-                    </MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem className="cursor-pointer hover:!bg-green-500">
-                    Settings{" "}
-                    <MenubarShortcut>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6 text-green-950"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                        />
-                      </svg>
-                    </MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem className="cursor-pointer hover:!bg-green-500">
-                    About
-                    <MenubarShortcut>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className="w-6 h-6 text-green-950"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                        />
-                      </svg>
-                    </MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem className="cursor-pointer hover:!bg-green-500">
-                    Schedules
-                    <MenubarShortcut>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </MenubarShortcut>
-                  </MenubarItem>
+                  {navlinks.map((link, index) => {
+                    if (link.name === "Profile") {
+                      return (
+                        <>
+                          <MenubarItem className="cursor-pointer hover:!bg-green-500">
+                            {link.name}
+                            <MenubarShortcut>
+                              {session?.user.image ? (
+                                <Image
+                                  src={session?.user.image}
+                                  height={25}
+                                  width={25}
+                                  className="rounded-full"
+                                  alt="Profile image"
+                                />
+                              ) : (
+                                <>{link.icon}</>
+                              )}
+                            </MenubarShortcut>
+                          </MenubarItem>
+                          <MenubarSeparator />
+                        </>
+                      );
+                    }
+                    return (
+                      <>
+                        <MenubarItem className="cursor-pointer hover:!bg-green-500">
+                          {link.name}
+                          <MenubarShortcut>{link.icon}</MenubarShortcut>
+                        </MenubarItem>
+                        <MenubarSeparator />
+                      </>
+                    );
+                  })}
                   <LogoutBtnMobileNav />
                 </MenubarContent>
               ) : (
@@ -187,139 +136,84 @@ const Navbar = async () => {
         </div>
 
         {/* Desktop Navv */}
-        <div className="hidden md:block">
-          <ul className="flex justify-between gap-10 items-center">
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    {session?.user.image ? (
-                      <Image
-                        src={session?.user.image}
-                        height={35}
-                        width={35}
-                        className="rounded-full"
-                      />
-                    ) : (
+        <div className="hidden md:flex justify-center items-center">
+          {session ? (
+            <>
+              <ul className="flex justify-between gap-10 items-center">
+                {navlinks.map((link) => {
+                  if (link.name === "Profile") {
+                    return (
+                      <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                        <TooltipProvider delayDuration={100}>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              {session?.user.image ? (
+                                <Image
+                                  src={session?.user.image}
+                                  height={35}
+                                  width={35}
+                                  className="rounded-full"
+                                />
+                              ) : (
+                                <>{link.icon}</>
+                              )}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{link.name}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                      <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                          <TooltipTrigger>{link.icon}</TooltipTrigger>
+                          <TooltipContent>
+                            <p>{link.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </li>
+                  );
+                })}
+                <LogoutBtnDesktopNav />
+              </ul>
+            </>
+          ) : (
+            <ul className="flex justify-between gap-10 items-center content-center">
+              <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        strokeWidth={1.5}
+                        strokeWidth="1.5"
                         stroke="currentColor"
-                        className="w-6 h-6 text-green-950"
+                        className="w-8 h-8 text-green-950"
                       >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+                          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
                         />
                       </svg>
-                    )}
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Profile</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              {/* {session?.user.image ? (
-                <Image
-                  src={session?.user.image}
-                  height={35}
-                  width={35}
-                  className="rounded-full"
-                />
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6 text-green-950"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              )} */}
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-8 h-8 text-green-950"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"
-                      />
-                    </svg>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Settings</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-8 h-8 text-green-950"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                />
-              </svg>
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-8 h-8 text-green-950"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </li>
-          </ul>
-
-          {/* <ul className="flex justify-between gap-4 items-center">
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              Profile
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              Settings
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              About
-            </li>
-            <li className="text-[18px] text-green-950 cursor-pointer font-medium">
-              Schedule
-            </li>
-          </ul> */}
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>About</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </li>
+              <li>
+                <AuthBtnDesktopNav />
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </nav>
