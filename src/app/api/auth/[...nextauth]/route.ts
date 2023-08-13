@@ -21,10 +21,6 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      // console.log("user", user);
-      // console.log("account", account);
-      // console.log("profile", profile);
-
       return true;
     },
     async redirect({ url, baseUrl }) {
