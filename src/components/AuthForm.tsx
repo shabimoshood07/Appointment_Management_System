@@ -1,15 +1,31 @@
 "use client";
 import React from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 type AuthFormProps = {
-  formAction: (formData: FormData) => Promise<void> | Promise<null | undefined>;
+  formAction: (formData: FormData) => Promise<void> | Promise<Boolean | string>;
   title: string;
 };
 
 const AuthForm = ({ formAction, title }: AuthFormProps) => {
+  const { toast } = useToast();
+
   const handlesubmit = async (formData: FormData) => {
     const data = await formAction(formData);
-    alert(data);
+
+    if (data === true) {
+      toast({
+        title: "Successful",
+        description: ` ${title} successfully`,
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: data as string,
+        variant: "destructive",
+      });
+    }
+
     console.log("data from form", data);
   };
 

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Session } from "next-auth";
 import Provider from "@/components/SessionProvider";
-
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,12 +21,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-green-950 h-screen`}
-      >
+      <body className={`${inter.className} bg-green-950 h-screen`}>
         <Provider session={session}>
           <Navbar />
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>
