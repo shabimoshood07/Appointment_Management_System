@@ -6,16 +6,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { z } from "zod";
+
 
 const prisma = new PrismaClient();
-
-const loginUserSchema = z.object({
-  email: z
-    .string()
-    .regex(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Invalid email"),
-  password: z.string().min(5, "Password should be minimum 5 characters"),
-});
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
@@ -41,15 +34,19 @@ export const authOptions: AuthOptions = {
       async authorize(credentials, req) {
         console.log("credentials 1", credentials);
 
-        const { email, password } = loginUserSchema.parse(credentials);
+        // const { email, password } = loginUserSchema.parse(credentials);
+        const { email, password } = credentials as { email: string, password: string }
+        if (!email || !password) throw new Error("Invalid login credentials")
+
         const user = await prisma.user.findUnique({
           where: { email },
         });
-        if (!user) return null;
+        if (!user) throw new Error("No user found");
 
         const isPasswordValid = await bcrypt.compare(password, user.password as string);
 
-        if (!isPasswordValid) return null;
+        if (!isPasswordValid) throw new Error("Invalid login credentials");
+        console.log("user", user);
 
         return user;
       },
@@ -69,6 +66,10 @@ export const authOptions: AuthOptions = {
       return baseUrl;
     },
     async session({ session, token, user }) {
+      const { id } = await prisma.user.findUnique({
+        where: { email: token.email as string }
+      }) as { id: string }
+      session.user.id = id
       return session;
     },
     async jwt({ token, user, account, profile }) {
@@ -77,6 +78,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/auth/login",
+    error: "/auth/error"
   },
 };
 
