@@ -7,8 +7,14 @@ type AuthFormProps = {
 };
 
 const AuthForm = ({ formAction, title }: AuthFormProps) => {
+  const handlesubmit = async (formData: FormData) => {
+    const data = await formAction(formData);
+    alert(data);
+    console.log("data from form", data);
+  };
+
   return (
-    <form className="space-y-6" action={formAction}>
+    <form className="space-y-6" action={handlesubmit}>
       <div>
         <label className="block text-sm sm:text-[17px] font-medium leading-6 text-slate-300">
           Email address

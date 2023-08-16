@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "next-auth/react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 const AuthProviderBtn = () => {
@@ -9,10 +10,16 @@ const AuthProviderBtn = () => {
           or continue with
         </span>
       </p>
-      <button className="flex items-center justify-center gap-3 w-full px-3 py-1.5 rounded-md bg-slate-300 text-[18px] hover:bg-green-800">
+      <button
+        className="flex items-center justify-center gap-3 w-full px-3 py-1.5 rounded-md bg-slate-300 text-[18px] hover:bg-green-800"
+        onClick={() => signIn("google")}
+      >
         <FcGoogle /> Google
       </button>
-      <button className="flex items-center justify-center gap-3 w-full px-3 py-1.5 rounded-md bg-slate-300 text-[18px] hover:bg-green-800">
+      <button
+        className="flex items-center justify-center gap-3 w-full px-3 py-1.5 rounded-md bg-slate-300 text-[18px] hover:bg-green-800"
+        onClick={() => signIn("github")}
+      >
         <FaGithub />
         Github
       </button>
