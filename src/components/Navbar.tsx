@@ -74,7 +74,10 @@ const Navbar = async () => {
                     if (link.name === "Profile") {
                       return (
                         <>
-                          <MenubarItem className="cursor-pointer hover:!bg-green-500">
+                          <MenubarItem
+                            className="cursor-pointer hover:!bg-green-500"
+                            key={index}
+                          >
                             {link.name}
                             <MenubarShortcut>
                               {session?.user.image ? (
@@ -96,7 +99,10 @@ const Navbar = async () => {
                     }
                     return (
                       <>
-                        <MenubarItem className="cursor-pointer hover:!bg-green-500">
+                        <MenubarItem
+                          className="cursor-pointer hover:!bg-green-500"
+                          key={index}
+                        >
                           {link.name}
                           <MenubarShortcut>{link.icon}</MenubarShortcut>
                         </MenubarItem>
@@ -138,39 +144,28 @@ const Navbar = async () => {
         {/* Desktop Navv */}
         <div className="hidden md:flex justify-center items-center">
           {session ? (
-            <>
-              <ul className="flex justify-between gap-10 items-center">
-                {navlinks.map((link) => {
-                  if (link.name === "Profile") {
-                    return (
-                      <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
-                        <TooltipProvider delayDuration={100}>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              {session?.user.image ? (
-                                <Image
-                                  src={session?.user.image}
-                                  height={35}
-                                  width={35}
-                                  className="rounded-full"
-                                />
-                              ) : (
-                                <>{link.icon}</>
-                              )}
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{link.name}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </li>
-                    );
-                  }
+            <ul className="flex justify-between gap-10 items-center">
+              {navlinks.map((link, index) => {
+                if (link.name === "Profile") {
                   return (
-                    <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                    <li
+                      className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center"
+                      key={index}
+                    >
                       <TooltipProvider delayDuration={100}>
                         <Tooltip>
-                          <TooltipTrigger>{link.icon}</TooltipTrigger>
+                          <TooltipTrigger>
+                            {session?.user.image ? (
+                              <Image
+                                src={session?.user.image}
+                                height={35}
+                                width={35}
+                                className="rounded-full"
+                              />
+                            ) : (
+                              <>{link.icon}</>
+                            )}
+                          </TooltipTrigger>
                           <TooltipContent>
                             <p>{link.name}</p>
                           </TooltipContent>
@@ -178,10 +173,22 @@ const Navbar = async () => {
                       </TooltipProvider>
                     </li>
                   );
-                })}
-                <LogoutBtnDesktopNav />
-              </ul>
-            </>
+                }
+                return (
+                  <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                    <TooltipProvider delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger>{link.icon}</TooltipTrigger>
+                        <TooltipContent>
+                          <p>{link.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </li>
+                );
+              })}
+              <LogoutBtnDesktopNav />
+            </ul>
           ) : (
             <ul className="flex justify-between gap-10 items-center content-center">
               <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">

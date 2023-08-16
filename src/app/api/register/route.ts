@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from 'next/server'
 import { PrismaClient } from "@prisma/client";
-import { z } from "zod";
+import { ZodError, z } from "zod";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -13,34 +14,48 @@ const registerUserSchema = z.object({
 });
 
 export async function POST(req: Request, res: NextApiResponse) {
-  const data = await req.json();
-  console.log("data", data);
 
-  const { email, password } = registerUserSchema.parse(data);
+  try {
+    const data = await req.json();
+    console.log("data", data);
 
-  console.log("email", email);
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+    const { email, password } = registerUserSchema.parse(data);
 
-  if (user !== null) {
-    return res.send({ user: null, message: "User already exists" });
+    console.log("email", email);
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (user !== null) {
+      return NextResponse.json({ error: "user already exists" }, { status: 400, })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    console.log("hashedPassword", hashedPassword);
+
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    console.log("newUser", newUser);
+
+    return NextResponse.json({ user: newUser, message: "User created successfully" }, { status: 201 })
+  } catch (error: any) {
+    if (error instanceof ZodError) {
+      let err = ""
+      err = error.issues.map((er) => {
+        return er.message
+      }).join(", ")
+      console.log("errorZodMsg", err);
+      console.log("errorZodMsg", typeof err);
+      return NextResponse.json({ error: err }, { status: 404, })
+
+    }
+    return NextResponse.json({ error: error.message }, { status: 500, })
   }
 
-  console.log("email", email);
-  
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
-  console.log("hashedPassword", hashedPassword);
-  
-  const newUser = await prisma.user.create({
-      data: {
-          email,
-          password: hashedPassword,
-        },
-    });
-    
-    console.log("newUser", newUser);
-    
-  return res.send({ user: newUser, message: "User created successfully" });
 }

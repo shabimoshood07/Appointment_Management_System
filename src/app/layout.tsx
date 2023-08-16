@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} bg-gradient-to-br from-green-950 from-40%  via-green-900 to-green-800 h-screen`}
+        className={`${inter.className} bg-green-950 h-screen`}
       >
         <Provider session={session}>
           <Navbar />
