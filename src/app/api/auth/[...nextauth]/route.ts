@@ -33,8 +33,6 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials, req) {
         console.log("credentials 1", credentials);
-
-        // const { email, password } = loginUserSchema.parse(credentials);
         const { email, password } = credentials as { email: string, password: string }
         if (!email || !password) throw new Error("Invalid login credentials")
 
