@@ -20,12 +20,14 @@ const Login = async () => {
       </div>
       <div className="mt-6 w-[90%] mx-auto sm:w-full sm:max-w-sm">
         <AuthForm formAction={login} title="Login" />
-        <div>
-          <AuthProviderBtn />
-          <p className="w-full text-right mt-4 text-slate-300 text-sm">
-            Don't have an account? <Link href="/auth/register" className="text-base">Register</Link>
-          </p>
-        </div>
+
+        <AuthProviderBtn />
+        <p className="w-full text-right mt-4 text-slate-300 text-sm">
+          Don't have an account?{" "}
+          <Link href="/auth/register" className="text-base">
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );
