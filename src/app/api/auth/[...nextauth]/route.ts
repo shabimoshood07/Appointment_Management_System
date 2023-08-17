@@ -7,7 +7,6 @@ import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
-
 const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {
@@ -32,19 +31,29 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        console.log("credentials 1", credentials);
-        const { email, password } = credentials as { email: string, password: string }
-        if (!email || !password) throw new Error("Invalid login credentials")
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
+        if (!email || !password) throw new Error("Invalid login credentials");
 
         const user = await prisma.user.findUnique({
           where: { email },
         });
+
+        console.log("user", user);
+
         if (!user) throw new Error("No user found");
 
-        const isPasswordValid = await bcrypt.compare(password, user.password as string);
+        if (user.password === null)
+          throw new Error("user exists, sign in using other methods");
+
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          user.password as string
+        );
 
         if (!isPasswordValid) throw new Error("Invalid login credentials");
-        console.log("user", user);
 
         return user;
       },
@@ -52,6 +61,8 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      console.log("email", email);
+
       if (account) {
         console.log("account", account);
       }
@@ -64,10 +75,11 @@ export const authOptions: AuthOptions = {
       return baseUrl;
     },
     async session({ session, token, user }) {
-      const { id } = await prisma.user.findUnique({
-        where: { email: token.email as string }
-      }) as { id: string }
-      session.user.id = id
+      const { id, role } = (await prisma.user.findUnique({
+        where: { email: token.email as string },
+      })) as { id: string; role: string };
+      session.user.id = id;
+      session.user.role = role;
       return session;
     },
     async jwt({ token, user, account, profile }) {
@@ -76,7 +88,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/auth/login",
-    error: "/auth/error"
+    error: "/auth/error",
   },
 };
 

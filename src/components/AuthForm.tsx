@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type AuthFormProps = {
   formAction: (formData: FormData) => Promise<void> | Promise<Boolean | string>;
@@ -8,25 +11,27 @@ type AuthFormProps = {
 };
 
 const AuthForm = ({ formAction, title }: AuthFormProps) => {
+  let [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const router = useRouter();
 
   const handlesubmit = async (formData: FormData) => {
-    const data = await formAction(formData);
-
-    if (data === true) {
-      toast({
-        title: "Successful",
-        description: ` ${title} successfully`,
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: data as string,
-        variant: "destructive",
-      });
-    }
-
-    console.log("data from form", data);
+    startTransition(async () => {
+      const data = await formAction(formData);
+      if (data === true) {
+        toast({
+          title: "Successful",
+          description: ` ${title} successfully`,
+        });
+        router.refresh();
+      } else {
+        toast({
+          title: "Error",
+          description: data as string,
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -71,7 +76,8 @@ const AuthForm = ({ formAction, title }: AuthFormProps) => {
       <div>
         <button
           type="submit"
-          className="flex w-full justify-center rounded-md bg-slate-300 px-3 py-1.5 text-sm font-semibold leading-6 text-green-950 shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800"
+          className="flex w-full justify-center rounded-md bg-slate-300 px-3 py-1.5 text-sm font-semibold leading-6 text-green-950 shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800 disabled:hover:bg-slate-300 disabled:opacity-25"
+          disabled={isPending}
         >
           {title}
         </button>

@@ -8,7 +8,7 @@ export const login = async (formData: FormData) => {
     redirect: false,
     email: formData.get("email"),
     password: formData.get("password"),
-    callbackUrl: "/",
+    // callbackUrl: "/",
   }).then(({ ok, error }) => {
     console.log(ok, error);
     if (error) {
