@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Rubik } from "next/font/google";
 import { Session } from "next-auth";
 import Provider from "@/components/SessionProvider";
 import { Toaster } from "@/components/ui/toaster";
-const inter = Inter({ subsets: ["latin"] });
+const rubik = Rubik({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gradient-to-br from-green-950 to-green-800 min-h-screen border border-yellow-400`}>
+      <body className={`${rubik.className} bg-gradient-to-br from-green-950 to-green-800 min-h-screen`}>
         <Provider session={session}>
           <Navbar />
           {children}

@@ -1,8 +1,9 @@
-import { AiOutlineSchedule } from "react-icons/ai";
+import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="relative  border-4 min-h-[calc(100vh-52px)] border-red-700">
+    <div className="min-h-[calc(100vh-60px)] max-w-6xl mx-auto p-2 xl:flex justify-evenly md:p-4">
       {/* <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -16,8 +17,25 @@ export default function Home() {
           clipRule="evenodd"
         />
       </svg> */}
-      <AiOutlineSchedule/>
-      <h1>Home</h1>
+      {/* <AiOutlineSchedule style={{ color: "red", fontSize: "11em" }} /> */}
+      <h1 className="text-slate-300 text-[25px] capitalize text-center px-2 pt-9 sm:text-[40px] md:pt-2 md:text-[50px] xl:text-[60px] xl:text-left xl:mt-28 xl:w-fit flex-1">
+        Manage your <span className="ml-2 uppercase">appointments</span>
+      </h1>
+      <div className="flex-1">
+        <Image
+          alt="hero"
+          src="/hero1.png"
+          width={400}
+          height={400}
+          className="my-4 md:my-0 block mx-auto"
+        />
+        {/* <button className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6">
+          Book an Appointment
+        </button> */}
+        <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">
+          Book an Appointment
+        </Skeleton>
+      </div>
     </div>
   );
 }
