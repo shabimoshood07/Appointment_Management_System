@@ -43,15 +43,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   password      String?
-  role          Role      @default(USER)
+  role          Role          @default(USER)
   accounts      Account[]
   sessions      Session[]
+  Appointment   Appointment[]
 }
 
 enum Role {
@@ -59,10 +60,29 @@ enum Role {
   ADMIN
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model Appointment {
+  id        String            @id @default(cuid())
+  title     String
+  date      DateTime
+  start     String
+  end       String
+  status    AppointmentStatus
+  user      User              @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
+
+enum AppointmentStatus {
+  CONFIRMED
+  PAID
+  CANCELLED
+}
+
+// model VerificationToken {
+//   identifier String
+//   token      String   @unique
+//   expires    DateTime
+
+//   @@unique([identifier, token])
+// }

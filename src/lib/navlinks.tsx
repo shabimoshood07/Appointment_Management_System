@@ -71,7 +71,7 @@ export const navlinks = [
   {
     name: "Profile",
     icon: <ProfileIcon />,
-    href: "/",
+    href: "/profile",
   },
   {
     name: "Settings",

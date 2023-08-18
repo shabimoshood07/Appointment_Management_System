@@ -155,16 +155,18 @@ const Navbar = async () => {
                       <TooltipProvider delayDuration={100}>
                         <Tooltip>
                           <TooltipTrigger>
-                            {session?.user.image ? (
-                              <Image
-                                src={session?.user.image}
-                                height={35}
-                                width={35}
-                                className="rounded-full"
-                              />
-                            ) : (
-                              <>{link.icon}</>
-                            )}
+                            <Link href={link.href}>
+                              {session?.user.image ? (
+                                <Image
+                                  src={session?.user.image}
+                                  height={35}
+                                  width={35}
+                                  className="rounded-full"
+                                />
+                              ) : (
+                                <>{link.icon}</>
+                              )}
+                            </Link>
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>{link.name}</p>
