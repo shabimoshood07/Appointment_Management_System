@@ -21,7 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${rubik.className} bg-gradient-to-br from-green-950 to-green-800 min-h-screen`}>
+      <body
+        className={`${rubik.className} bg-gradient-to-br from-green-950 to-green-800 min-h-screen`}
+      >
         <Provider session={session}>
           <Navbar />
           {children}
