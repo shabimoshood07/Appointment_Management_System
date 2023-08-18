@@ -4,7 +4,7 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 const AuthProviderBtn = () => {
   return (
-    <div className="flex justify-center flex-col items-center gap-4 mx-auto max-w-md">
+    <div className="flex justify-center flex-col items-center gap-4 mx-auto max-w-md w-full">
       <p className="border border-slate-300 w-full mt-8 mb-6 relative flex justify-center items-center">
         <span className="absolute top-[-13px] bg-gradient-to-br from-green-950 to-green-800 h-fit  text-slate-300 px-4">
           or continue with
