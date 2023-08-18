@@ -5,6 +5,7 @@ import { Rubik } from "next/font/google";
 import { Session } from "next-auth";
 import Provider from "@/components/SessionProvider";
 import { Toaster } from "@/components/ui/toaster";
+import AddAppointment from "@/components/AddAppointment";
 const rubik = Rubik({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
