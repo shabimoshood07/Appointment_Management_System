@@ -219,7 +219,7 @@ const Navbar = async () => {
                 </TooltipProvider>
               </li>
               <li>
-                <AuthBtnDesktopNav />
+                <AuthBtnDesktopNav props=" bg-green-950 hover:bg-green-800 text-slate-300" />
               </li>
             </ul>
           )}

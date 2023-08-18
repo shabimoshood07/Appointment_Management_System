@@ -12,10 +12,10 @@ export default async function Home() {
 
   return (
     <div className="min-h-[calc(100vh-60px)] max-w-6xl mx-auto p-2 xl:flex justify-evenly md:p-4">
-      <h1 className="text-slate-300 text-[25px] capitalize text-center px-2 pt-9 sm:text-[40px] md:pt-2 md:text-[50px] xl:text-[60px] xl:text-left xl:mt-28 xl:w-fit flex-1">
+      <h1 className="text-slate-300 text-[25px] capitalize text-center px-2 pt-9 sm:text-[40px] md:pt-2 md:text-[50px] xl:text-[60px] xl:text-left  xl:w-fit flex-1 xl:my-auto">
         Manage your <span className="ml-2 uppercase">appointments</span>
       </h1>
-      <div className="flex-1">
+      <div className="flex flex-col flex-1  justify-center self-stretch">
         <Image
           alt="hero"
           src="/hero1.png"
@@ -38,11 +38,11 @@ export default async function Home() {
           <>
             <div className=" flex justify-center gap-10">
               <Link href="/auth/register">
-                <Button className="bg-green-950 hover:bg-green-800 text-slate-300">
+                <Button className="bg-slate-300 hover:bg-green-800 text-green-950">
                   Register
                 </Button>
               </Link>
-              <AuthBtnDesktopNav />
+              <AuthBtnDesktopNav props="bg-slate-300 hover:bg-green-800 text-green-950" />
             </div>
             <AuthProviderBtn />
           </>
