@@ -1,5 +1,4 @@
 "use client";
-// import Layout from "@/components/layout";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -8,7 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { formatDate } from "@fullcalendar/core";
 import { useState } from "react";
 import AddAppointment from "@/components/AddAppointment";
-// import { ReactDOM } from "react";
+import ReactDOM from "react-dom";
 
 import {
   Dialog,
@@ -18,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 
 function renderEventContent(eventInfo) {
   return (
@@ -31,21 +30,35 @@ function renderEventContent(eventInfo) {
 
 export default function CalendarPage() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
+  // const [currentEvents, setCurrentEvents] = useState([
+  //   {
+  //     id: Math.random(),
+  //     title: "event 1",
+  //     date: "2023-08-17",
+  //     start: "08:00",
+  //     resourceId: "a",
+  //   },
+  //   {
+  //     id: Math.random(),
+  //     title: "event 2",
+  //     date: "2023-08-18",
+  //     start: "08:00",
+  //     resourceId: "b",
+  //   },
+  // ]);
   const [currentEvents, setCurrentEvents] = useState([
     {
-      id: Math.random(),
-      title: "event 1",
-      date: "2023-08-17",
-      start: "08:00",
-      resourceId: "a",
+      title: "sleep",
+      date: "2023-08-21",
+      start:
+        new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T12:00:00",
+      end:
+        new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T15:00:00",
+      editable: true,
+      color: "yellow",
     },
-    {
-      id: Math.random(),
-      title: "event 2",
-      date: "2023-08-18",
-      start: "08:00",
-      resourceId: "b",
-    },
+    { title: "eat", date: "2023-08-20" },
+    { title: "wash", date: "2023-08-20" },
   ]);
 
   function handleWeekendsToggle() {
@@ -53,9 +66,7 @@ export default function CalendarPage() {
   }
 
   const handleDateClick = (arg) => {
-    // bind with an arrow function
-    console.log(arg);
-    alert(arg.dateStr);
+    console.log("date click", arg);
   };
 
   return (
@@ -116,10 +127,8 @@ export default function CalendarPage() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            // right: "resourceTimelineWeek,dayGridMonth,timeGridWeek",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-          //   initialView="resourceTimelineWeek"
           initialView="dayGridMonth"
           dayMaxEvents={true}
           weekends={weekendsVisible}
@@ -132,56 +141,36 @@ export default function CalendarPage() {
             { id: "b", title: "Auditorium B", eventColor: "green" },
             { id: "c", title: "Auditorium C", eventColor: "orange" },
           ]}
-          initialEvents={currentEvents.map((evn) => {
-            const { start, title, date } = evn;
-            let d =
-              new Date(date).toISOString().replace(/T.*$/, "") + "T12:00:00";
-            console.log("d", d);
-            return { title, start: d, resourceId: "c" };
-          })}
-          events={[
-            {
-              title: "sleep",
-              date: "2023-08-21",
-              start:
-                new Date("2023-08-21").toISOString().replace(/T.*$/, "") +
-                "T12:00:00",
-              end:
-                new Date("2023-08-21").toISOString().replace(/T.*$/, "") +
-                "T15:00:00",
-              editable: true,
-              color: "yellow",
-            },
-            { title: "eat", date: "2023-08-20" },
-          ]}
+          // initialEvents={currentEvents.map((evn) => {
+          //   const { start, title, date } = evn;
+          //   let d =
+          //     new Date(date).toISOString().replace(/T.*$/, "") + "T12:00:00";
+          //   return { title, start: d, resourceId: "c" };
+          // })}
+
+
+          events={currentEvents}
           eventContent={renderEventContent}
           eventBackgroundColor="#E8C547"
           // dateClick={handleDateClick}
-          dayCellDidMount={(info) => {
-            const container = document.createElement("div"); // Create a container element
-            info.el.appendChild(container); // Append the container to the day cell
+          dayCellDidMount={async (info) => {
 
-            // Render the AddAppointment component into the container
-            ReactDOM.render(<AddAppointment />, container);
+            console.log("infor", info);
 
-            // Cleanup when the day cell is unmounted
-            // info.el.addEventListener("DOMNodeRemoved", () => {
-            //   ReactDOM.unmountComponentAtNode(container);
-            // });
-            // const componentHTML = ReactDOMServer.renderToStaticMarkup(
-            //   <AddAppointment text={info.dayNumberText} />
-            // );
-            // info.el.innerHTML = componentHTML;
+            const container = document.createElement("div");
+            info.el.appendChild(container);
+            let date = new Date(info.date);
+            let formattedDate = date.toISOString().split('T')[0];
+            container.setAttribute("id", `${"modalPop" + formattedDate}`)
+            const root = createRoot(document.getElementById(`${"modalPop" + formattedDate}`));
+            root.render((<AddAppointment data={{
+              date: info.date,
+              isToday: info.isToday,
+              isPast: info.isPast,
+              isFuture: info.isFuture
+            }} />));
 
-            // return <h1>new</h1>;
           }}
-          // select={() => console.log("selected")}
-          // dayCellContent={(argg) => {
-          //   const { dayNumberText } = argg;
-          //   console.log("argg", argg);
-          //   return <AddAppointment />;
-          // }}
-          // dayCellContent=<AddAppointment />
         />
       </div>
     </div>

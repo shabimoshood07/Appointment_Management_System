@@ -7,14 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// model User {
-//     id        Int      @id @default(autoincrement())
-//     email     String   @unique
-//     name      String?
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-// }
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -63,9 +55,8 @@ enum Role {
 model Appointment {
   id        String            @id @default(cuid())
   title     String
-  date      DateTime
-  start     String
-  end       String
+  start     DateTime
+  end       DateTime
   status    AppointmentStatus
   user      User              @relation(fields: [userId], references: [id])
   userId    String
@@ -78,11 +69,3 @@ enum AppointmentStatus {
   PAID
   CANCELLED
 }
-
-// model VerificationToken {
-//   identifier String
-//   token      String   @unique
-//   expires    DateTime
-
-//   @@unique([identifier, token])
-// }
