@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
 import { useState } from "react";
 
 type Props = {
@@ -22,9 +21,39 @@ type Props = {
   // dayNumberText: string;
 }
 
-const AddAppointment = ({ data }: { data: Props }) => {
-  const [allDay, setAllDay] = useState(true)
+type currentEvents = {
+  title?: String
+  date?: String
+  start?: String
+  end?: String
+  editable?: Boolean
+  color?: String
+}
 
+const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, currentEvents: currentEvents[], onClose: () => void }) => {
+  const [allDay, setAllDay] = useState(true)
+  const [openD, setOpenD] = useState(true)
+
+  const validateTime = (time) => {
+    const selectedTime = new Date(time);
+    console.log("selectedTime", selectedTime);
+
+
+    for (let event of currentEvents) {
+      // if(!event.start || !event.end){
+      //   const time = new Date(event.date);
+      // }
+      const eventStart = new Date(event.start);
+      const eventEnd = new Date(event.end);
+      console.log(event.start, event.end);
+      console.log(eventEnd, eventStart);
+      if (selectedTime >= eventStart && selectedTime <= eventEnd) {
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const toggleAllDay = () => {
     setAllDay(!allDay)
@@ -35,8 +64,8 @@ const AddAppointment = ({ data }: { data: Props }) => {
 
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog onOpenChange={() => setOpenD(!openD)} open={openD} defaultOpen={openD} >
+      <DialogTrigger asChild >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -52,7 +81,7 @@ const AddAppointment = ({ data }: { data: Props }) => {
           />
         </svg>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-slate-300">
         <form className="space-y-6">
           <h1>{data.date.toDateString()}</h1>
           <div>
@@ -67,6 +96,7 @@ const AddAppointment = ({ data }: { data: Props }) => {
                 autoComplete="title"
                 required
                 className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+
               />
             </div>
           </div>
@@ -105,6 +135,18 @@ const AddAppointment = ({ data }: { data: Props }) => {
                     autoComplete="start"
                     required
                     className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
+                      if (!validateTime(e.target.value)) {
+                        e.preventDefault();
+                        alert('This time is not available.');
+                      }
+                    }}
+                  />
+                  <input
+                    type="time"
+                    required
+                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                    step="1800"
                   />
                 </div>
               </div>
@@ -125,9 +167,15 @@ const AddAppointment = ({ data }: { data: Props }) => {
                     type="datetime-local"
                     autoComplete="end"
                     required
-                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6" onChange={(e) => {
+                      if (!validateTime(e.target.value)) {
+                        e.preventDefault();
+                        alert('This time is not available.');
+                      }
+                    }}
                   />
                 </div>
+
               </div>
             </>
             )

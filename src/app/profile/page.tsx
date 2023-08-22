@@ -54,12 +54,14 @@ export default function CalendarPage() {
         new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T12:00:00",
       end:
         new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T15:00:00",
-      editable: true,
-      color: "yellow",
+      // editable: true,
+      // color: "yellow",
     },
     { title: "eat", date: "2023-08-20" },
     { title: "wash", date: "2023-08-20" },
   ]);
+  const [isAddAppointmentVisible, setIsAddAppointmentVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
@@ -96,11 +98,10 @@ export default function CalendarPage() {
             All Events ({currentEvents.length})
           </h2>
           <ul>
-            {currentEvents.map((event) => {
+            {currentEvents.map((event, index) => {
               let date = new Date(event.date).toISOString().replace(/T.*$/, "");
-
               return (
-                <li key={event.id}>
+                <li key={index}>
                   <b>
                     {formatDate(date, {
                       year: "numeric",
@@ -136,6 +137,11 @@ export default function CalendarPage() {
           editable={true}
           selectable={true}
           selectMirror={true}
+
+
+
+
+
           resources={[
             { id: "a", title: "Auditorium A" },
             { id: "b", title: "Auditorium B", eventColor: "green" },
@@ -148,30 +154,81 @@ export default function CalendarPage() {
           //   return { title, start: d, resourceId: "c" };
           // })}
 
+          
 
           events={currentEvents}
           eventContent={renderEventContent}
           eventBackgroundColor="#E8C547"
-          // dateClick={handleDateClick}
-          dayCellDidMount={async (info) => {
 
-            console.log("infor", info);
 
-            const container = document.createElement("div");
-            info.el.appendChild(container);
-            let date = new Date(info.date);
-            let formattedDate = date.toISOString().split('T')[0];
-            container.setAttribute("id", `${"modalPop" + formattedDate}`)
-            const root = createRoot(document.getElementById(`${"modalPop" + formattedDate}`));
-            root.render((<AddAppointment data={{
-              date: info.date,
-              isToday: info.isToday,
-              isPast: info.isPast,
-              isFuture: info.isFuture
-            }} />));
+          dayCellWillUnmount={(arg) => console.log("arg", arg)
+          }
+          // dayCellDidMount={async (info) => {
+          //   const container = document.createElement("div");
+          //   info.el.appendChild(container);
+          //   let date = new Date(info.date);
+          //   let formattedDate = date.toISOString().split('T')[0];
+          //   container.setAttribute("id", `${"modalPop" + formattedDate}`)
+          //   const modalElement = document.getElementById(`modalPop${formattedDate}`);
+          //   if (modalElement) {
+          //     const root = createRoot(modalElement);
+          //     root.render((
+          //       <AddAppointment data={{
+          //         date: info.date,
+          //         isToday: info.isToday,
+          //         isPast: info.isPast,
+          //         isFuture: info.isFuture
+          //       }} currentEvents={currentEvents} />
+          //     ));
+          //   }
 
+          // }}
+
+
+
+          dateClick={(info) => {
+            setSelectedDate(info.dateStr); // Save the clicked date
+            setIsAddAppointmentVisible(true); // Show the AddAppointment dialog
           }}
+
+
+
+
+        // selectAllow={(selectInfo) => {
+        //   console.log("selectInfo", selectInfo);
+
+        //   const start = new Date(selectInfo.startStr);
+        //   const end = new Date(selectInfo.endStr);
+
+        //   for (let event of currentEvents) {
+        //     const eventStart = new Date(event.start);
+        //     const eventEnd = new Date(event.end);
+
+        //     if (
+        //       (start >= eventStart && start < eventEnd) ||
+        //       (end > eventStart && end <= eventEnd) ||
+        //       (start <= eventStart && end >= eventEnd)
+        //     ) {
+        //       return false;
+        //     }
+        //   }
+
+        //   return true;
+        // }}
         />
+
+        {isAddAppointmentVisible && (
+          <AddAppointment
+            data={{
+              date: new Date(selectedDate),
+              isToday: new Date(selectedDate).toDateString() === new Date().toDateString(),
+              isPast: new Date(selectedDate) < new Date(),
+              isFuture: new Date(selectedDate) > new Date(),
+            }}
+            currentEvents={currentEvents}
+            onClose={() => setIsAddAppointmentVisible(false)} // Pass a callback to close the dialog
+          />
+        )}
       </div>
     </div>
   );
