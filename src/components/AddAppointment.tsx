@@ -1,55 +1,44 @@
 "use client";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useEffect, useState } from "react";
+import AvailableSlotsBtn from "./AvailableSlotsBtn";
+
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
-  date: Date;
-  // dow: number;
-  // isDisabled: boolean;
-  // isOther: boolean;
+  date: string;
   isToday: boolean;
   isPast: boolean;
   isFuture: boolean;
-  // isMonthStart: boolean;
-  // dayNumberText: string;
-};
-
-type currentappointmentss = {
-  title?: String;
-  date?: String;
-  start?: String;
-  end?: String;
-  editable?: Boolean;
-  color?: String;
 };
 
 const AddAppointment = ({
   data,
-  appointments,
+  dateAppointments,
   openD,
   setOpenD,
 }: {
   data: Props;
-  appointments: Appointment[];
+  dateAppointments: Appointment[];
   openD: boolean;
   setOpenD: (value: boolean) => void;
 }) => {
-  const [allDay, setAllDay] = useState(true);
-  const [formdata, setFormdata] = useState({
-    start: "",
-    end: "",
-    title: "",
-  });
-  console.log("data", data);
-  console.log("appappointments",appointments);
+  const [title, setTitle] = useState<string>("");
+  const [end, setEnd] = useState<(value: Date) => void>();
+  const [start, setStart] = useState<(value: Date) => void>();
+  const [duration, setDuration] = useState<Number>(30);
 
+  useEffect(() => {
+    setDuration(30);
+  }, [openD]);
   const validateTime = (time: string) => {
     const selectedTime = new Date(time) as Date;
     console.log("selectedTime", selectedTime);
@@ -73,20 +62,12 @@ const AddAppointment = ({
       }
     }
   };
-
-  const toggleAllDay = () => {
-    setAllDay(!allDay);
-  };
+  console.log("open");
 
   const handleSbmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let start = new Date(formdata.start);
-    let end = new Date(formdata.end);
-    let title = formdata.title;
     let date = data.date;
-
-    console.log(typeof date);
-    console.log("formdata", start, end, title, typeof date);
+    console.log("formdata", start, end, title, date);
 
     const res = await fetch("/api/appointment", {
       method: "POST",
@@ -104,9 +85,34 @@ const AddAppointment = ({
       open={openD}
       defaultOpen={openD}
     >
-      <DialogContent className="bg-slate-300">
+      <DialogContent className="bg-slate-300 border-2 border-red-700 !w-98% !max-w-2xl">
         <form className="space-y-6" onSubmit={handleSbmit}>
           <h1>{new Date(data.date).toDateString()}</h1>
+          <div>
+            <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
+              Appointment duration
+            </label>
+            <div className="mt-2">
+              <Select
+                defaultValue="30"
+                onValueChange={(value) => setDuration(Number(value))}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="30 minutes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Duration</SelectLabel>
+                    <SelectItem value="30">30 minutes</SelectItem>
+                    <SelectItem value="60">1 hour</SelectItem>
+                    <SelectItem value="90">1hour 30minutes</SelectItem>
+                    <SelectItem value="120">2 hours</SelectItem>
+                    <SelectItem value="180">2hours 30minutes</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
               Title
@@ -119,88 +125,26 @@ const AddAppointment = ({
                 autoComplete="title"
                 required
                 className="p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-                onChange={(e) =>
-                  setFormdata({ ...formdata, title: e.target.value })
-                }
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
           </div>
-          <div className="flex justify-start items-center gap-2">
+
+          {/* Available Slots */}
+          <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
-              All Day
+              Available slots
             </label>
-            <input
-              id="all-day"
-              name="all-day"
-              type="checkbox"
-              autoComplete="all-day"
-              className="  text-green-950 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-              onChange={toggleAllDay}
+            <AvailableSlotsBtn
+              duration={duration}
+              dateAppointments={dateAppointments}
+              dateStr={data.date}
+              setEnd={setEnd}
+              setStart={setStart}
             />
           </div>
 
-          {allDay && (
-            <>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="start"
-                    className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950"
-                  >
-                    start
-                  </label>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="start"
-                    name="start"
-                    type="datetime-local"
-                    autoComplete="start"
-                    required
-                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-                    onChange={(e) => {
-                      console.log(e.target.value);
-
-                      if (!validateTime(e.target.value)) {
-                        e.preventDefault();
-                        alert("This time is not available.");
-                      }
-                      setFormdata({ ...formdata, start: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="end"
-                    className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950"
-                  >
-                    end
-                  </label>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="end"
-                    name="end"
-                    type="datetime-local"
-                    autoComplete="end"
-                    required
-                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-                    onChange={(e) => {
-                      if (!validateTime(e.target.value)) {
-                        e.preventDefault();
-                        alert("This time is not available.");
-                      }
-                      setFormdata({ ...formdata, end: e.target.value });
-                    }}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-
+          {/* Submit button */}
           <div>
             <button
               type="submit"
