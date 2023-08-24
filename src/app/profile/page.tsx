@@ -61,9 +61,8 @@ export default function CalendarPage() {
   }
 
   const handleDateClick = (info) => {
-    console.log("info", info);
     const appointmentsOnDate = appointments.filter(
-      (app: Appointment) => app.date === info.dateStr
+      (app: Appointment) => app.date === info.dateStr.split("T")[0]
     );
     setDateAppointments(appointmentsOnDate);
     setSelectedDate(info.dateStr);
@@ -161,7 +160,7 @@ export default function CalendarPage() {
             }}
             openD={openD}
             setOpenD={setOpenD}
-            appointments={dateAppointments}
+            dateAppointments={dateAppointments}
           />
         )}
       </div>
