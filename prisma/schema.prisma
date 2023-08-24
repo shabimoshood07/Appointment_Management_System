@@ -55,9 +55,10 @@ enum Role {
 model Appointment {
   id        String            @id @default(cuid())
   title     String
+  date      String
   start     DateTime
   end       DateTime
-  status    AppointmentStatus
+  status    AppointmentStatus @default(PENDING)
   user      User              @relation(fields: [userId], references: [id])
   userId    String
   createdAt DateTime          @default(now())
@@ -68,4 +69,5 @@ enum AppointmentStatus {
   CONFIRMED
   PAID
   CANCELLED
+  PENDING
 }

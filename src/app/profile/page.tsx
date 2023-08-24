@@ -5,19 +5,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { formatDate } from "@fullcalendar/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddAppointment from "@/components/AddAppointment";
-import ReactDOM from "react-dom";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { createRoot } from 'react-dom/client';
 
 function renderEventContent(eventInfo) {
   return (
@@ -30,45 +19,56 @@ function renderEventContent(eventInfo) {
 
 export default function CalendarPage() {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
-  // const [currentEvents, setCurrentEvents] = useState([
   //   {
-  //     id: Math.random(),
-  //     title: "event 1",
-  //     date: "2023-08-17",
-  //     start: "08:00",
-  //     resourceId: "a",
+  //     title: "sleep",
+  //     date: "2023-08-21",
+  //     start: "2023-08-23T09:00:00.000Z",
+  //     // new Date("2023-08-23T09:00:00.000Z "),
+  //     // new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T12:00:00",
+  //     end: "2023-08-23T10:00:00.000Z",
+  //     // new Date("2023-08-23T10:00:00.000Z"),
+  //     // new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T15:00:00",
+  //     // editable: true,
+  //     // color: "yellow",
   //   },
-  //   {
-  //     id: Math.random(),
-  //     title: "event 2",
-  //     date: "2023-08-18",
-  //     start: "08:00",
-  //     resourceId: "b",
-  //   },
+  //   { title: "eat", date: "2023-08-20" },
+  //   { title: "wash", date: "2023-08-20" },
   // ]);
-  const [currentEvents, setCurrentEvents] = useState([
-    {
-      title: "sleep",
-      date: "2023-08-21",
-      start:
-        new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T12:00:00",
-      end:
-        new Date("2023-08-21").toISOString().replace(/T.*$/, "") + "T15:00:00",
-      // editable: true,
-      // color: "yellow",
-    },
-    { title: "eat", date: "2023-08-20" },
-    { title: "wash", date: "2023-08-20" },
-  ]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [dateAppointments, setDateAppointments] = useState<Appointment[] | []>(
+    []
+  );
+
   const [isAddAppointmentVisible, setIsAddAppointmentVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+
+  const [openD, setOpenD] = useState(false);
+
+  const getAllAppointments = async () => {
+    const res = await fetch("/api/appointment");
+    console.log("res", res);
+    const { appointments } = await res.json();
+    console.log("data", appointments);
+    setAppointments(appointments);
+  };
+
+  useEffect(() => {
+    getAllAppointments();
+  }, []);
 
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
 
-  const handleDateClick = (arg) => {
-    console.log("date click", arg);
+  const handleDateClick = (info) => {
+    console.log("info", info);
+    const appointmentsOnDate = appointments.filter(
+      (app: Appointment) => app.date === info.dateStr
+    );
+    setDateAppointments(appointmentsOnDate);
+    setSelectedDate(info.dateStr);
+    setOpenD(!openD);
+    setIsAddAppointmentVisible(true);
   };
 
   return (
@@ -95,24 +95,25 @@ export default function CalendarPage() {
         </div>
         <div className="demo-app-sidebar-section ">
           <h2 className="font-bold underline mb-4">
-            All Events ({currentEvents.length})
+            All Events ({appointments.length})
           </h2>
           <ul>
-            {currentEvents.map((event, index) => {
-              let date = new Date(event.date).toISOString().replace(/T.*$/, "");
-              return (
-                <li key={index}>
-                  <b>
-                    {formatDate(date, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </b>
-                  <i>{event.title}</i>
-                </li>
-              );
-            })}
+            {appointments.length > 0 &&
+              appointments.map((event) => {
+                let date = new Date(event?.start);
+                return (
+                  <li key={event.id}>
+                    <b>
+                      {formatDate(date, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </b>
+                    <i>{event.title}</i>
+                  </li>
+                );
+              })}
           </ul>
         </div>
       </div>
@@ -137,96 +138,30 @@ export default function CalendarPage() {
           editable={true}
           selectable={true}
           selectMirror={true}
-
-
-
-
-
           resources={[
             { id: "a", title: "Auditorium A" },
             { id: "b", title: "Auditorium B", eventColor: "green" },
             { id: "c", title: "Auditorium C", eventColor: "orange" },
           ]}
-          // initialEvents={currentEvents.map((evn) => {
-          //   const { start, title, date } = evn;
-          //   let d =
-          //     new Date(date).toISOString().replace(/T.*$/, "") + "T12:00:00";
-          //   return { title, start: d, resourceId: "c" };
-          // })}
-
-          
-
-          events={currentEvents}
+          events={appointments}
           eventContent={renderEventContent}
           eventBackgroundColor="#E8C547"
-
-
-          dayCellWillUnmount={(arg) => console.log("arg", arg)
-          }
-          // dayCellDidMount={async (info) => {
-          //   const container = document.createElement("div");
-          //   info.el.appendChild(container);
-          //   let date = new Date(info.date);
-          //   let formattedDate = date.toISOString().split('T')[0];
-          //   container.setAttribute("id", `${"modalPop" + formattedDate}`)
-          //   const modalElement = document.getElementById(`modalPop${formattedDate}`);
-          //   if (modalElement) {
-          //     const root = createRoot(modalElement);
-          //     root.render((
-          //       <AddAppointment data={{
-          //         date: info.date,
-          //         isToday: info.isToday,
-          //         isPast: info.isPast,
-          //         isFuture: info.isFuture
-          //       }} currentEvents={currentEvents} />
-          //     ));
-          //   }
-
-          // }}
-
-
-
-          dateClick={(info) => {
-            setSelectedDate(info.dateStr); // Save the clicked date
-            setIsAddAppointmentVisible(true); // Show the AddAppointment dialog
-          }}
-
-
-
-
-        // selectAllow={(selectInfo) => {
-        //   console.log("selectInfo", selectInfo);
-
-        //   const start = new Date(selectInfo.startStr);
-        //   const end = new Date(selectInfo.endStr);
-
-        //   for (let event of currentEvents) {
-        //     const eventStart = new Date(event.start);
-        //     const eventEnd = new Date(event.end);
-
-        //     if (
-        //       (start >= eventStart && start < eventEnd) ||
-        //       (end > eventStart && end <= eventEnd) ||
-        //       (start <= eventStart && end >= eventEnd)
-        //     ) {
-        //       return false;
-        //     }
-        //   }
-
-        //   return true;
-        // }}
+          dateClick={handleDateClick}
         />
 
         {isAddAppointmentVisible && (
           <AddAppointment
             data={{
-              date: new Date(selectedDate),
-              isToday: new Date(selectedDate).toDateString() === new Date().toDateString(),
-              isPast: new Date(selectedDate) < new Date(),
-              isFuture: new Date(selectedDate) > new Date(),
+              date: selectedDate!,
+              isToday:
+                new Date(selectedDate!).toDateString() ===
+                new Date().toDateString(),
+              isPast: new Date(selectedDate!) < new Date(),
+              isFuture: new Date(selectedDate!) > new Date(),
             }}
-            currentEvents={currentEvents}
-            onClose={() => setIsAddAppointmentVisible(false)} // Pass a callback to close the dialog
+            openD={openD}
+            setOpenD={setOpenD}
+            appointments={dateAppointments}
           />
         )}
       </div>
