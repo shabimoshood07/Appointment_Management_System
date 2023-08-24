@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { ZodError, z } from "zod";
 import bcrypt from "bcryptjs";
+import {prisma} from "@/lib/prisma";
 
-const prisma = new PrismaClient();
 
 const registerUserSchema = z.object({
   email: z

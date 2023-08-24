@@ -19,71 +19,94 @@ type Props = {
   isFuture: boolean;
   // isMonthStart: boolean;
   // dayNumberText: string;
-}
+};
 
-type currentEvents = {
-  title?: String
-  date?: String
-  start?: String
-  end?: String
-  editable?: Boolean
-  color?: String
-}
+type currentappointmentss = {
+  title?: String;
+  date?: String;
+  start?: String;
+  end?: String;
+  editable?: Boolean;
+  color?: String;
+};
 
-const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, currentEvents: currentEvents[], onClose: () => void }) => {
-  const [allDay, setAllDay] = useState(true)
-  const [openD, setOpenD] = useState(true)
+const AddAppointment = ({
+  data,
+  appointments,
+  openD,
+  setOpenD,
+}: {
+  data: Props;
+  appointments: Appointment[];
+  openD: boolean;
+  setOpenD: (value: boolean) => void;
+}) => {
+  const [allDay, setAllDay] = useState(true);
+  const [formdata, setFormdata] = useState({
+    start: "",
+    end: "",
+    title: "",
+  });
+  console.log("data", data);
+  console.log("appappointments",appointments);
 
-  const validateTime = (time) => {
-    const selectedTime = new Date(time);
+  const validateTime = (time: string) => {
+    const selectedTime = new Date(time) as Date;
     console.log("selectedTime", selectedTime);
 
+    for (let appointment of appointments) {
+      if (appointment.start && appointment.end) {
+        // const appointmentsStart = new Date(appointments.start);
+        // const appointmentsEnd = new Date(appointments.end);
+        const appointmentsStart = new Date(appointment.start.toString());
+        const appointmentsEnd = new Date(appointment.end.toString());
+        console.log(appointment.start, appointment.end);
+        console.log(appointmentsEnd, appointmentsStart);
+        if (
+          selectedTime >= appointmentsStart &&
+          selectedTime <= appointmentsEnd
+        ) {
+          return false;
+        }
 
-    for (let event of currentEvents) {
-      // if(!event.start || !event.end){
-      //   const time = new Date(event.date);
-      // }
-      const eventStart = new Date(event.start);
-      const eventEnd = new Date(event.end);
-      console.log(event.start, event.end);
-      console.log(eventEnd, eventStart);
-      if (selectedTime >= eventStart && selectedTime <= eventEnd) {
-        return false;
+        return true;
       }
     }
-
-    return true;
   };
 
   const toggleAllDay = () => {
-    setAllDay(!allDay)
-  }
-  console.log(data.date);
+    setAllDay(!allDay);
+  };
 
+  const handleSbmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    let start = new Date(formdata.start);
+    let end = new Date(formdata.end);
+    let title = formdata.title;
+    let date = data.date;
 
+    console.log(typeof date);
+    console.log("formdata", start, end, title, typeof date);
 
+    const res = await fetch("/api/appointment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ start, end, title, date }),
+    });
+    return;
+  };
 
   return (
-    <Dialog onOpenChange={() => setOpenD(!openD)} open={openD} defaultOpen={openD} >
-      <DialogTrigger asChild >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-4 h-4 sm:w-6 sm:h-6 absolute top-0 z-10 cursor-pointer"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 6v12m6-6H6"
-          />
-        </svg>
-      </DialogTrigger>
+    <Dialog
+      onOpenChange={() => setOpenD(!openD)}
+      open={openD}
+      defaultOpen={openD}
+    >
       <DialogContent className="bg-slate-300">
-        <form className="space-y-6">
-          <h1>{data.date.toDateString()}</h1>
+        <form className="space-y-6" onSubmit={handleSbmit}>
+          <h1>{new Date(data.date).toDateString()}</h1>
           <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
               Title
@@ -95,8 +118,10 @@ const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, current
                 type="text"
                 autoComplete="title"
                 required
-                className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-
+                className="p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                onChange={(e) =>
+                  setFormdata({ ...formdata, title: e.target.value })
+                }
               />
             </div>
           </div>
@@ -112,12 +137,10 @@ const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, current
               className="  text-green-950 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
               onChange={toggleAllDay}
             />
-
           </div>
 
-
-          {allDay &&
-            (<>
+          {allDay && (
+            <>
               <div>
                 <div className="flex items-center justify-between">
                   <label
@@ -136,17 +159,14 @@ const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, current
                     required
                     className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
                     onChange={(e) => {
+                      console.log(e.target.value);
+
                       if (!validateTime(e.target.value)) {
                         e.preventDefault();
-                        alert('This time is not available.');
+                        alert("This time is not available.");
                       }
+                      setFormdata({ ...formdata, start: e.target.value });
                     }}
-                  />
-                  <input
-                    type="time"
-                    required
-                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-                    step="1800"
                   />
                 </div>
               </div>
@@ -167,19 +187,19 @@ const AddAppointment = ({ data, currentEvents, onClose }: { data: Props, current
                     type="datetime-local"
                     autoComplete="end"
                     required
-                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6" onChange={(e) => {
+                    className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                    onChange={(e) => {
                       if (!validateTime(e.target.value)) {
                         e.preventDefault();
-                        alert('This time is not available.');
+                        alert("This time is not available.");
                       }
+                      setFormdata({ ...formdata, end: e.target.value });
                     }}
                   />
                 </div>
-
               </div>
             </>
-            )
-          }
+          )}
 
           <div>
             <button
