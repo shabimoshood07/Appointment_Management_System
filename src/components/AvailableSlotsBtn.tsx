@@ -53,6 +53,10 @@ const AvailableSlotsBtn = ({
         minute: "2-digit",
       })}`;
 
+      // console.log("currentTime.toLocaleTimeString", currentTime.toLocaleTimeString([]));
+      // console.log("buttonText", buttonText);
+      
+
       // Check if the current time and nextTime fall within the start and end time of a booked appointment
 
       let isBooked = false;
@@ -91,7 +95,27 @@ const AvailableSlotsBtn = ({
             timeZoneName: "short",
           });
 
+          // console.log(
+          //   "compare time new Date",
+          //   "currentDateTime = ",
+          //   currentdateTime,
+          //   // new Date(currentdateTime).getTime(),
+          //   "nextDateTime = ",
+          //   nextdateTime,
+          //   // new Date(nextdateTime).getTime(),
+          //   "appointment start = ",
+          //   appointment.start,
+          //   // new Date(appointment.start).getTime(),
+          //   "appointment end= ",
+          //   appointment.end
+          //   // new Date(appointment.end).getTime()
+          // );
+
           return (
+            (new Date(appointment.start).getTime() <
+              new Date(nextdateTime).getTime() &&
+              new Date(appointment.end).getTime() >
+                new Date(currentdateTime).getTime()) ||
             (new Date(appointment.start).getTime() >=
               new Date(currentdateTime).getTime() &&
               new Date(appointment.start).getTime() <
@@ -101,6 +125,38 @@ const AvailableSlotsBtn = ({
               new Date(appointment.end).getTime() <=
                 new Date(nextdateTime).getTime())
           );
+
+          // return (
+          //   new Date(appointment.start).getTime() <=
+          //     new Date(nextdateTime).getTime() &&
+          //   new Date(appointment.end).getTime() >=
+          //     new Date(currentdateTime).getTime()
+          // );
+
+          // return (
+          //   new Date(currentdateTime).getTime() >=
+          //     new Date(appointment.start).getTime() &&
+          //   new Date(nextdateTime).getTime() <=
+          //     new Date(appointment.end).getTime()
+          // );
+
+          // return (
+          //   new Date(appointment.start).getTime() <=
+          //     new Date(nextdateTime).getTime() &&
+          //   new Date(appointment.end).getTime() >=
+          //     new Date(currentdateTime).getTime()
+          // );
+
+          // return (
+          //   (new Date(appointment.start).getTime() >=
+          //     new Date(currentdateTime).getTime() &&
+          //     new Date(appointment.start).getTime() <
+          //       new Date(nextdateTime).getTime()) ||
+          //   (new Date(appointment.end).getTime() >
+          //     new Date(currentdateTime).getTime() &&
+          //     new Date(appointment.end).getTime() <=
+          //       new Date(nextdateTime).getTime())
+          // );
         });
       }
 
@@ -108,6 +164,8 @@ const AvailableSlotsBtn = ({
 
       currentTime = nextTime;
     }
+
+    console.log("btns", btns);
 
     setButtons(btns);
   }, [duration]);
