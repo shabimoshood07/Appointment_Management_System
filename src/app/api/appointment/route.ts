@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions)
-    if (!session) redirect('/register')
+    if (!session) { redirect('/') }
     const userId = session.user.id
     const data = await request.json()
     console.log(data, userId);
