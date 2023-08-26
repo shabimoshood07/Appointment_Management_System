@@ -39,30 +39,6 @@ const AddAppointment = ({
   useEffect(() => {
     setDuration(30);
   }, [openD]);
-  const validateTime = (time: string) => {
-    const selectedTime = new Date(time) as Date;
-    console.log("selectedTime", selectedTime);
-
-    for (let appointment of appointments) {
-      if (appointment.start && appointment.end) {
-        // const appointmentsStart = new Date(appointments.start);
-        // const appointmentsEnd = new Date(appointments.end);
-        const appointmentsStart = new Date(appointment.start.toString());
-        const appointmentsEnd = new Date(appointment.end.toString());
-        console.log(appointment.start, appointment.end);
-        console.log(appointmentsEnd, appointmentsStart);
-        if (
-          selectedTime >= appointmentsStart &&
-          selectedTime <= appointmentsEnd
-        ) {
-          return false;
-        }
-
-        return true;
-      }
-    }
-  };
-  console.log("open");
 
   const handleSbmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,8 +115,12 @@ const AddAppointment = ({
               duration={duration}
               dateAppointments={dateAppointments}
               dateStr={data.date}
-              setEnd={setEnd}
-              setStart={setStart}
+              setEnd={(value: Date | ((value: Date) => void) | undefined) =>
+                setEnd(() => value)
+              }
+              setStart={(value: Date | ((value: Date) => void) | undefined) =>
+                setStart(() => value)
+              }
             />
           </div>
 

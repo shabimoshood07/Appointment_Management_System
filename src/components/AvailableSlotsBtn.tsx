@@ -35,7 +35,6 @@ const AvailableSlotsBtn = ({
     });
     return formattedDate;
   };
-  console.log("dateappappointments", dateAppointments);
 
   useEffect(() => {
     const btns = [];
@@ -52,12 +51,6 @@ const AvailableSlotsBtn = ({
         hour: "2-digit",
         minute: "2-digit",
       })}`;
-
-      // console.log("currentTime.toLocaleTimeString", currentTime.toLocaleTimeString([]));
-      // console.log("buttonText", buttonText);
-      
-
-      // Check if the current time and nextTime fall within the start and end time of a booked appointment
 
       let isBooked = false;
 
@@ -94,23 +87,6 @@ const AvailableSlotsBtn = ({
             second: "numeric",
             timeZoneName: "short",
           });
-
-          // console.log(
-          //   "compare time new Date",
-          //   "currentDateTime = ",
-          //   currentdateTime,
-          //   // new Date(currentdateTime).getTime(),
-          //   "nextDateTime = ",
-          //   nextdateTime,
-          //   // new Date(nextdateTime).getTime(),
-          //   "appointment start = ",
-          //   appointment.start,
-          //   // new Date(appointment.start).getTime(),
-          //   "appointment end= ",
-          //   appointment.end
-          //   // new Date(appointment.end).getTime()
-          // );
-
           return (
             (new Date(appointment.start).getTime() <
               new Date(nextdateTime).getTime() &&
@@ -125,38 +101,6 @@ const AvailableSlotsBtn = ({
               new Date(appointment.end).getTime() <=
                 new Date(nextdateTime).getTime())
           );
-
-          // return (
-          //   new Date(appointment.start).getTime() <=
-          //     new Date(nextdateTime).getTime() &&
-          //   new Date(appointment.end).getTime() >=
-          //     new Date(currentdateTime).getTime()
-          // );
-
-          // return (
-          //   new Date(currentdateTime).getTime() >=
-          //     new Date(appointment.start).getTime() &&
-          //   new Date(nextdateTime).getTime() <=
-          //     new Date(appointment.end).getTime()
-          // );
-
-          // return (
-          //   new Date(appointment.start).getTime() <=
-          //     new Date(nextdateTime).getTime() &&
-          //   new Date(appointment.end).getTime() >=
-          //     new Date(currentdateTime).getTime()
-          // );
-
-          // return (
-          //   (new Date(appointment.start).getTime() >=
-          //     new Date(currentdateTime).getTime() &&
-          //     new Date(appointment.start).getTime() <
-          //       new Date(nextdateTime).getTime()) ||
-          //   (new Date(appointment.end).getTime() >
-          //     new Date(currentdateTime).getTime() &&
-          //     new Date(appointment.end).getTime() <=
-          //       new Date(nextdateTime).getTime())
-          // );
         });
       }
 
@@ -164,8 +108,6 @@ const AvailableSlotsBtn = ({
 
       currentTime = nextTime;
     }
-
-    console.log("btns", btns);
 
     setButtons(btns);
   }, [duration]);
@@ -181,16 +123,16 @@ const AvailableSlotsBtn = ({
               className={`px-2 py-1 m-2 disabled:opacity-20 cursor-pointer disabled:cursor-default text-[10px] md:text-sm text-slate-300 w-full rounded-sm bg-green-950 ${
                 selectedButtons === btn ? "!bg-green-800" : ""
               }`}
-              onClick={(e) => {
+              onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
                 let date = dateStr;
-                let st = new Date(e.target.value.split("-")[0] + "" + date);
-                let en = new Date(e.target.value.split("-")[1] + "" + date);
-
-                console.log(st, en);
-                console.log(e.target.value);
+                let st = new Date(
+                  e.currentTarget.value.split("-")[0] + "" + date
+                );
+                let en = new Date(
+                  e.currentTarget.value.split("-")[1] + "" + date
+                );
                 setEnd(en);
                 setStart(st);
-
                 setSelectedButtons(btn);
               }}
               value={btn.props.children}

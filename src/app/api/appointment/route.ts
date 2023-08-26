@@ -7,8 +7,12 @@ import { revalidatePath } from 'next/cache'
 
 
 export async function GET(request: Request) {
-    const appointments = await prisma.appointment.findMany()
-    return NextResponse.json({ appointments })
+    try {
+        const appointments = await prisma.appointment.findMany()
+        return NextResponse.json({ appointments }, { status: 200, statusText: "ok" })
+    } catch (error) {
+        return NextResponse.json({ error: "Something went wrong" }, { status: 500, statusText: "Something went wrong" })
+    }
 }
 
 export async function POST(request: Request) {
@@ -16,7 +20,6 @@ export async function POST(request: Request) {
     if (!session) { redirect('/') }
     const userId = session.user.id
     const data = await request.json()
-    console.log(data, userId);
     const newAppointment = await prisma.appointment.create({
         data: {
             ...data, userId
