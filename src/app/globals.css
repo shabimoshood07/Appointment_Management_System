@@ -86,29 +86,14 @@ h2 {
   font-size: 16px;
 }
 
-/* ul {
-  margin: 0;
-  padding: 0 0 0 1.5em;
-}
-
-li {
-  margin: 1.5em 0;
-  padding: 0;
-} */
 
 b {
-  /* used for event dates/times */
   margin-right: 3px;
 }
 
-/* .demo-app {
-  display: flex;
-  min-height: 100%;
-  font-size: 14px;
-} */
+
 
 .demo-app-sidebar {
-  /* width: 300px; */
   line-height: 1.5;
   background: #eaf9ff;
   border-right: 1px solid #d3e2e8;
@@ -120,7 +105,6 @@ b {
 
 .demo-app-main {
   flex-grow: 1;
-  /* padding: 3em; */
 }
 
 .fc {
@@ -164,4 +148,9 @@ b {
   .fc-daygrid-day-number{
     font-size: 15px;
   }
+}
+
+
+.data-radix-popper-content-wrapper{
+  font-size: 50px !important;
 }

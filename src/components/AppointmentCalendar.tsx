@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import AddAppointment from "@/components/AddAppointment";
 import { Session } from "next-auth";
 import ReactDOM from "react-dom";
+import AppointmentHoverCard from "./AppointmentHoverCard";
 
 export const Options = () => {
   return <h1>Oprions</h1>;
@@ -32,8 +33,6 @@ export default function AppointmentCalendar({
 
   const [openD, setOpenD] = useState(false);
 
-  console.log(userAppointments, allAppointments);
-
   function handleWeekendsToggle() {
     setWeekendsVisible(!weekendsVisible);
   }
@@ -50,17 +49,9 @@ export default function AppointmentCalendar({
 
   function renderEventContent(eventInfo) {
     let appointmentId = eventInfo.event._def.extendedProps.userId;
-    let sessionId = session.user.id;
+    let userId = session.user.id;
     return (
-      <p
-        className={`flex flex-wrap justify-center items-center w-full rounded-sm h-full p-1 text-green-950 text-[10px] ${
-          sessionId === appointmentId ? "bg-green-300" : "bg-red-500"
-        }`}
-      >
-        <b>{eventInfo.timeText}</b>
-        <i>Booked!</i>
-        {/* <i>{eventInfo.event.title}</i> */}
-      </p>
+      <AppointmentHoverCard appointmentId={appointmentId} userId={userId} />
     );
   }
 
@@ -144,12 +135,12 @@ export default function AppointmentCalendar({
           eventContent={renderEventContent}
           eventBackgroundColor="#E8C547"
           dateClick={handleDateClick}
-          eventMouseEnter={(mouseEnterInfo) => {
-            let ele = mouseEnterInfo.el;
-            console.log(ele);
-            // ele?.appendChild(<Options/>)
-            // ele?.appendChild(ReactDOM.render(<Options />, document.createElement("div")));
-          }}
+          // eventMouseEnter={(mouseEnterInfo) => {
+          //   let ele = mouseEnterInfo.el;
+          //   console.log(ele);
+          //   ele?.appendChild(<Options/>)
+          //   ele?.appendChild(ReactDOM.render(<Options />, document.createElement("div")));
+          // }}
           //   eventClick={(clickInfo) => {
           //     console.log(clickInfo);
           //   }}
