@@ -29,7 +29,7 @@ const AppointmentHoverCard = ({
         <i>Booked!</i>
       </HoverCardTrigger>
       {userId === appointmentId ? (
-        <HoverCardContent className="border-2 border-red-700 !z-50">
+        <HoverCardContent className="!w-fit">
           Icons
         </HoverCardContent>
       ) : (

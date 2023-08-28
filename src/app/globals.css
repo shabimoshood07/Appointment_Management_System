@@ -86,12 +86,9 @@ h2 {
   font-size: 16px;
 }
 
-
 b {
   margin-right: 3px;
 }
-
-
 
 .demo-app-sidebar {
   line-height: 1.5;
@@ -124,20 +121,24 @@ b {
   margin: 20px 20px;
 }
 
-.fc-daygrid-day-number{
+.fc-daygrid-day-number {
   font-size: 10px;
 }
 
-.fc-daygrid-day{
+.fc-daygrid-day {
   position: relative;
+}
+
+.fc .fc-daygrid-event {
+  z-index: unset !important;
 }
 
 @media screen and (min-width: 700px) {
   .fc-toolbar-title {
     font-size: 18px !important;
   }
- 
 }
+
 @media screen and (min-width: 850px) {
   .fc-toolbar-title {
     font-size: 20px !important;
@@ -145,12 +146,11 @@ b {
   .fc-button-primary {
     font-size: 15px !important;
   }
-  .fc-daygrid-day-number{
+  .fc-daygrid-day-number {
     font-size: 15px;
   }
 }
 
-
-.data-radix-popper-content-wrapper{
+.data-radix-popper-content-wrapper {
   font-size: 50px !important;
 }
