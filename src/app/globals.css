@@ -135,15 +135,9 @@ b {
   z-index: unset !important;
 }
 
-.fc-timegrid-event-harness>.fc-timegrid-event {
-  inset: 0px;
-  position: absolute;
-  z-index: -10 !important;
-}
-
-.fc-timegrid-event-harness-inset {
-  /* z-index: unset !important; */
-  z-index: 2;
+.fc-direction-ltr .fc-daygrid-more-link {
+  float: left;
+  font-size: 11px;
 }
 
 @media screen and (min-width: 700px) {

@@ -5,12 +5,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { formatDate } from "@fullcalendar/core";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import AddAppointment from "@/components/AddAppointment";
 import { Session } from "next-auth";
 import ReactDOM from "react-dom";
 import AppointmentHoverCard from "./AppointmentHoverCard";
 import Link from "next/link";
+import { toast } from "./ui/use-toast";
+import Loading from "@/app/loading";
 
 export const Options = () => {
   return <h1>Oprions</h1>;
@@ -39,29 +41,57 @@ export default function AppointmentCalendar({
   }
 
   const handleDateClick = (info) => {
-    const appointmentsOnDate = allAppointments.filter(
-      (app: Appointment) => app.date === info.dateStr.split("T")[0]
+    const clickedDate = new Date(info.dateStr);
+    const nowDate = new Date();
+
+    const clickedDateWithoutTime = new Date(
+      clickedDate.getFullYear(),
+      clickedDate.getMonth(),
+      clickedDate.getDate()
     );
-    setDateAppointments(appointmentsOnDate);
-    setSelectedDate(info.dateStr);
-    setOpenD(!openD);
-    setIsAddAppointmentVisible(true);
+    const nowDateWithoutTime = new Date(
+      nowDate.getFullYear(),
+      nowDate.getMonth(),
+      nowDate.getDate()
+    );
+
+    if (clickedDateWithoutTime < nowDateWithoutTime) {
+      toast({
+        title: "Error",
+        description: "Can not book appointment on past date",
+        variant: "destructive",
+        duration: 2000,
+      });
+    } else {
+      const appointmentsOnDate = allAppointments.filter(
+        (app: Appointment) => app.date === info.dateStr.split("T")[0]
+      );
+      setDateAppointments(appointmentsOnDate);
+      setSelectedDate(info.dateStr);
+      setOpenD(!openD);
+      setIsAddAppointmentVisible(true);
+    }
   };
 
   function renderEventContent(eventInfo) {
-    console.log(eventInfo);
-    
     let appointmentId = eventInfo.event._def.extendedProps.userId;
     let userId = session.user.id;
-    let id   = eventInfo.event._def.publicId
+    let id = eventInfo.event._def.publicId;
     return (
       <>
         {appointmentId === userId ? (
-          <Link href={`/appointment/${id}`} className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm">
-            <i className="w-full text-center text-green-950 block text-[12px]">Booked!</i>
+          <Link
+            href={`/appointment/${id}`}
+            className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm"
+          >
+            <i className="w-full text-center text-green-950 block text-[12px] ">
+              Booked!
+            </i>
           </Link>
         ) : (
-          <i className="w-full h-full text-center text-green-950  bg-red-500 cursor-default flex items-center justify-center text-[12px] rounded-sm">Booked!</i>
+          <i className="w-full h-full text-center text-green-950  bg-red-500 cursor-default flex items-center justify-center text-[12px] rounded-sm">
+            Booked!
+          </i>
         )}
       </>
     );
@@ -139,7 +169,7 @@ export default function AppointmentCalendar({
           weekends={weekendsVisible}
           nowIndicator={true}
           editable={true}
-          selectable={true}
+          // selectable={true}
           selectMirror={true}
           resources={[
             { id: "a", title: "Auditorium A" },
@@ -150,6 +180,8 @@ export default function AppointmentCalendar({
           eventContent={renderEventContent}
           eventBackgroundColor="transparent"
           dateClick={handleDateClick}
+          // select={false}
+
           // eventMouseEnter={(mouseEnterInfo) => {
           //   let ele = mouseEnterInfo.el;
           //   console.log(ele);

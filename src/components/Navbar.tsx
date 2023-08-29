@@ -74,25 +74,28 @@ const Navbar = async () => {
                     if (link.name === "Profile") {
                       return (
                         <>
-                          <MenubarItem
-                            className="cursor-pointer hover:!bg-green-500"
-                            key={index}
-                          >
-                            {link.name}
-                            <MenubarShortcut>
-                              {session?.user.image ? (
-                                <Image
-                                  src={session?.user.image}
-                                  height={25}
-                                  width={25}
-                                  className="rounded-full"
-                                  alt="Profile image"
-                                />
-                              ) : (
-                                <>{link.icon}</>
-                              )}
-                            </MenubarShortcut>
-                          </MenubarItem>
+                          <Link href={link.href}>
+                            <MenubarItem
+                              className="cursor-pointer hover:!bg-green-500"
+                              key={index}
+                            >
+                              {link.name}
+                              <MenubarShortcut>
+                                {session?.user.image ? (
+                                  <Image
+                                    src={session?.user.image}
+                                    height={25}
+                                    width={25}
+                                    className="rounded-full"
+                                    alt="Profile image"
+                                  />
+                                ) : (
+                                  <>{link.icon}</>
+                                )}
+                              </MenubarShortcut>
+                            </MenubarItem>
+                          </Link>
+
                           <MenubarSeparator />
                         </>
                       );

@@ -2,7 +2,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useEffect, useState } from "react";
 import AvailableSlotsBtn from "./AvailableSlotsBtn";
-
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "./ui/use-toast";
 
 type Props = {
   date: string;
@@ -35,6 +36,8 @@ const AddAppointment = ({
   const [end, setEnd] = useState<(value: Date) => void>();
   const [start, setStart] = useState<(value: Date) => void>();
   const [duration, setDuration] = useState<Number>(30);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setDuration(30);
@@ -42,17 +45,34 @@ const AddAppointment = ({
 
   const handleSbmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let date = data.date;
-    console.log("formdata", start, end, title, date);
+    setLoading(true);
+    try {
+      let date = data.date;
+      const res = await fetch("/api/appointment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ start, end, title, date }),
+      });
 
-    const res = await fetch("/api/appointment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ start, end, title, date }),
-    });
-    return;
+      toast({
+        title: "Success",
+        description: "Appointment booked successfully",
+        duration: 2000,
+      });
+      router.refresh();
+      setOpenD(false);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "something went wrong",
+        variant: "destructive",
+        duration: 3000,
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -128,7 +148,8 @@ const AddAppointment = ({
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-green-300 px-3 py-1.5 text-sm font-semibold leading-6 text-green-950 shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800 disabled:hover:bg-slate-300 disabled:opacity-25"
+              disabled={loading}
+              className={`flex w-full justify-center rounded-md bg-green-300 px-3 py-1.5 text-sm font-semibold leading-6 text-green-950 shadow-sm hover:bg-green-800  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800 disabled:hover:bg-slate-300 disabled:opacity-25`}
             >
               Book Appointment
             </button>
