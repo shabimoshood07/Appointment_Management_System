@@ -70,6 +70,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -112,6 +113,7 @@ b {
 .fc-toolbar-title {
   font-size: 15px !important;
 }
+
 .fc-button-primary {
   font-size: 10px !important;
 }
@@ -133,6 +135,17 @@ b {
   z-index: unset !important;
 }
 
+.fc-timegrid-event-harness>.fc-timegrid-event {
+  inset: 0px;
+  position: absolute;
+  z-index: -10 !important;
+}
+
+.fc-timegrid-event-harness-inset {
+  /* z-index: unset !important; */
+  z-index: 2;
+}
+
 @media screen and (min-width: 700px) {
   .fc-toolbar-title {
     font-size: 18px !important;
@@ -143,9 +156,11 @@ b {
   .fc-toolbar-title {
     font-size: 20px !important;
   }
+
   .fc-button-primary {
     font-size: 15px !important;
   }
+
   .fc-daygrid-day-number {
     font-size: 15px;
   }

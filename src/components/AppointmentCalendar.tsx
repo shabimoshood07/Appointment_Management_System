@@ -10,6 +10,7 @@ import AddAppointment from "@/components/AddAppointment";
 import { Session } from "next-auth";
 import ReactDOM from "react-dom";
 import AppointmentHoverCard from "./AppointmentHoverCard";
+import Link from "next/link";
 
 export const Options = () => {
   return <h1>Oprions</h1>;
@@ -48,11 +49,25 @@ export default function AppointmentCalendar({
   };
 
   function renderEventContent(eventInfo) {
+    console.log(eventInfo);
+    
     let appointmentId = eventInfo.event._def.extendedProps.userId;
     let userId = session.user.id;
+    let id   = eventInfo.event._def.publicId
     return (
-      <AppointmentHoverCard appointmentId={appointmentId} userId={userId} />
+      <>
+        {appointmentId === userId ? (
+          <Link href={`/appointment/${id}`} className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm">
+            <i className="w-full text-center text-green-950 block text-[12px]">Booked!</i>
+          </Link>
+        ) : (
+          <i className="w-full h-full text-center text-green-950  bg-red-500 cursor-default flex items-center justify-center text-[12px] rounded-sm">Booked!</i>
+        )}
+      </>
     );
+    // return (
+    //   <AppointmentHoverCard appointmentId={appointmentId} userId={userId} />
+    // );
   }
 
   return (
@@ -133,7 +148,7 @@ export default function AppointmentCalendar({
           ]}
           events={allAppointments}
           eventContent={renderEventContent}
-          eventBackgroundColor="#E8C547"
+          eventBackgroundColor="transparent"
           dateClick={handleDateClick}
           // eventMouseEnter={(mouseEnterInfo) => {
           //   let ele = mouseEnterInfo.el;

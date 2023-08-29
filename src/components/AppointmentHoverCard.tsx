@@ -19,12 +19,10 @@ const AppointmentHoverCard = ({
       onOpenChange={() => userId === appointmentId}
     >
       <HoverCardTrigger
-        className={`${
-          userId !== appointmentId &&
+        className={`${userId !== appointmentId &&
           "cursor-default disabled:pointer-events-none"
-        } ${
-          userId === appointmentId ? "bg-green-300" : "bg-red-500"
-        } w-full flex justify-center text-[12px] text-green-950 rounded-sm h-full items-center !z-10 relative`}
+          } ${userId === appointmentId ? "bg-green-300" : "bg-red-500"
+          } w-full flex justify-center text-[12px] text-green-950 rounded-sm h-full items-center`}
       >
         <i>Booked!</i>
       </HoverCardTrigger>
