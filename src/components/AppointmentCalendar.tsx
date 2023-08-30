@@ -123,9 +123,9 @@ export default function AppointmentCalendar({
           </label>
         </div>
         <div className="demo-app-sidebar-section ">
-          <h2 className="font-bold underline mb-4 flex items-center gap-2">
+          <h2 className="font-bold  mb-4 flex items-center gap-2 underline">
             Your Appointments ({userAppointments.length})
-            <div className="h-4 w-8 bg-green-300 "></div>
+            <i className="bg-green-300 text-[10px] px-2 py-1 rounded-sm">Booked</i>
           </h2>
           <ul>
             {userAppointments.length > 0 &&

@@ -33,19 +33,31 @@ const AddAppointment = ({
   setOpenD: (value: boolean) => void;
 }) => {
   const [title, setTitle] = useState<string>("");
-  const [end, setEnd] = useState<(value: Date) => void>();
-  const [start, setStart] = useState<(value: Date) => void>();
+  const [end, setEnd] = useState<((value: Date) => void) | null>();
+  const [start, setStart] = useState<((value: Date) => void) | null>();
   const [duration, setDuration] = useState<Number>(30);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     setDuration(30);
+    setStart(null);
+    setEnd(null);
+    setTitle("");
   }, [openD]);
 
   const handleSbmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!start || !end || !title) {
+      return toast({
+        title: "Error",
+        description: "Pick a duration",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
     setLoading(true);
+
     try {
       let date = data.date;
       const res = await fetch("/api/appointment", {
