@@ -13,51 +13,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
-
 const page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const session = await getServerSession(authOptions);
@@ -88,25 +43,35 @@ const page = async ({ params }: { params: { id: string } }) => {
         Appointment details
       </h1>
 
-      <Table className="border">
+      <Table className="border text-slate-300">
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[300px]">Title</TableHead>
-            <TableHead className="text-center">Date</TableHead>
-            <TableHead className="text-center">Start</TableHead>
-            <TableHead className="text-center">End</TableHead>
-            <TableHead className="text-center">Status</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
+          <TableRow className="!text-slate-300">
+            <TableHead className="text-slate-300  w-[300px]">Title</TableHead>
+            <TableHead className="text-slate-300  text-center">Date</TableHead>
+            <TableHead className="text-slate-300  text-center">Start</TableHead>
+            <TableHead className="text-slate-300  text-center">End</TableHead>
+            <TableHead className="text-slate-300  text-center">Status</TableHead>
+            <TableHead className="text-slate-300  text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow key={appointment.id}>
-            <TableCell className="border border-red-500 text-left">{appointment.title}</TableCell>
-            <TableCell className="border border-red-500 text-center">{appointment.date}</TableCell>
-            <TableCell className="border border-red-500 text-center">{appointment.start.toLocaleTimeString()}</TableCell>
-            <TableCell className="border border-red-500 text-center">{appointment.end.toLocaleTimeString()}</TableCell>
-            <TableCell className="border border-red-500 text-center">{appointment.status}</TableCell>
-            <TableCell className="border border-red-500 text-center">
+            <TableCell className=" text-left">
+              {appointment.title}
+            </TableCell>
+            <TableCell className=" text-center">
+              {appointment.date}
+            </TableCell>
+            <TableCell className=" text-center">
+              {appointment.start.toLocaleTimeString()}
+            </TableCell>
+            <TableCell className=" text-center">
+              {appointment.end.toLocaleTimeString()}
+            </TableCell>
+            <TableCell className=" text-center">
+              {appointment.status}
+            </TableCell>
+            <TableCell className=" text-center">
               <button>delete</button> <button>edit</button>
             </TableCell>
           </TableRow>
