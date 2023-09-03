@@ -83,7 +83,7 @@ const Navbar = async () => {
                               <MenubarShortcut>
                                 {session?.user.image ? (
                                   <Image
-                                    src={session?.user.image}
+                                    src={session?.user.image.toString()}
                                     height={25}
                                     width={25}
                                     className="rounded-full"
@@ -102,13 +102,16 @@ const Navbar = async () => {
                     }
                     return (
                       <>
-                        <MenubarItem
-                          className="cursor-pointer hover:!bg-green-500"
-                          key={index}
-                        >
-                          {link.name}
-                          <MenubarShortcut>{link.icon}</MenubarShortcut>
-                        </MenubarItem>
+                        <Link href={link.href}>
+                          <MenubarItem
+                            className="cursor-pointer hover:!bg-green-500"
+                            key={index}
+                          >
+                            {link.name}
+                            <MenubarShortcut>{link.icon}</MenubarShortcut>
+                          </MenubarItem>
+                        </Link>
+
                         <MenubarSeparator />
                       </>
                     );
@@ -161,7 +164,8 @@ const Navbar = async () => {
                             <Link href={link.href}>
                               {session?.user.image ? (
                                 <Image
-                                  src={session?.user.image}
+                                  src={session?.user.image.toString()}
+                                  alt="Img"
                                   height={35}
                                   width={35}
                                   className="rounded-full"
@@ -181,14 +185,16 @@ const Navbar = async () => {
                 }
                 return (
                   <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
-                    <TooltipProvider delayDuration={100}>
-                      <Tooltip>
-                        <TooltipTrigger>{link.icon}</TooltipTrigger>
-                        <TooltipContent>
-                          <p>{link.name}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <Link href={link.href}>
+                      <TooltipProvider delayDuration={100}>
+                        <Tooltip>
+                          <TooltipTrigger>{link.icon}</TooltipTrigger>
+                          <TooltipContent>
+                            <p>{link.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Link>
                   </li>
                 );
               })}

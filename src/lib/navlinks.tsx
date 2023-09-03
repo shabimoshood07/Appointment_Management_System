@@ -49,7 +49,7 @@ const AboutIcon = () => (
   </svg>
 );
 
-const SchedulesIcon = () => (
+const AppointmentIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -65,7 +65,6 @@ const SchedulesIcon = () => (
     />
   </svg>
 );
-
 
 export const navlinks = [
   {
@@ -84,8 +83,8 @@ export const navlinks = [
     href: "/",
   },
   {
-    name: "Schedules",
-    icon: <SchedulesIcon />,
-    href: "/",
+    name: "Appointment",
+    icon: <AppointmentIcon />,
+    href: "/appointment",
   },
 ];

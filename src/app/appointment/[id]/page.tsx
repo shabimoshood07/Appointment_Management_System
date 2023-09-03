@@ -50,27 +50,25 @@ const page = async ({ params }: { params: { id: string } }) => {
             <TableHead className="text-slate-300  text-center">Date</TableHead>
             <TableHead className="text-slate-300  text-center">Start</TableHead>
             <TableHead className="text-slate-300  text-center">End</TableHead>
-            <TableHead className="text-slate-300  text-center">Status</TableHead>
-            <TableHead className="text-slate-300  text-center">Actions</TableHead>
+            <TableHead className="text-slate-300  text-center">
+              Status
+            </TableHead>
+            <TableHead className="text-slate-300  text-center">
+              Actions
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow key={appointment.id}>
-            <TableCell className=" text-left">
-              {appointment.title}
-            </TableCell>
-            <TableCell className=" text-center">
-              {appointment.date}
-            </TableCell>
+            <TableCell className=" text-left">{appointment.title}</TableCell>
+            <TableCell className=" text-center">{appointment.date}</TableCell>
             <TableCell className=" text-center">
               {appointment.start.toLocaleTimeString()}
             </TableCell>
             <TableCell className=" text-center">
               {appointment.end.toLocaleTimeString()}
             </TableCell>
-            <TableCell className=" text-center">
-              {appointment.status}
-            </TableCell>
+            <TableCell className=" text-center">{appointment.status}</TableCell>
             <TableCell className=" text-center">
               <button>delete</button> <button>edit</button>
             </TableCell>

@@ -5,18 +5,11 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { formatDate } from "@fullcalendar/core";
-import { Suspense, useEffect, useState } from "react";
+import { useState } from "react";
 import AddAppointment from "@/components/AddAppointment";
 import { Session } from "next-auth";
-import ReactDOM from "react-dom";
-import AppointmentHoverCard from "./AppointmentHoverCard";
 import Link from "next/link";
 import { toast } from "./ui/use-toast";
-import Loading from "@/app/loading";
-
-export const Options = () => {
-  return <h1>Oprions</h1>;
-};
 
 export default function AppointmentCalendar({
   session,
@@ -32,7 +25,7 @@ export default function AppointmentCalendar({
     []
   );
   const [isAddAppointmentVisible, setIsAddAppointmentVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   const [openD, setOpenD] = useState(false);
 
@@ -40,7 +33,7 @@ export default function AppointmentCalendar({
     setWeekendsVisible(!weekendsVisible);
   }
 
-  const handleDateClick = (info) => {
+  const handleDateClick = (info: any) => {
     const clickedDate = new Date(info.dateStr);
     const nowDate = new Date();
 
@@ -73,7 +66,7 @@ export default function AppointmentCalendar({
     }
   };
 
-  function renderEventContent(eventInfo) {
+  function renderEventContent(eventInfo: any) {
     let appointmentId = eventInfo.event._def.extendedProps.userId;
     let userId = session.user.id;
     let id = eventInfo.event._def.publicId;
@@ -125,7 +118,9 @@ export default function AppointmentCalendar({
         <div className="demo-app-sidebar-section ">
           <h2 className="font-bold  mb-4 flex items-center gap-2 underline">
             Your Appointments ({userAppointments.length})
-            <i className="bg-green-300 text-[10px] px-2 py-1 rounded-sm">Booked</i>
+            <i className="bg-green-300 text-[10px] px-2 py-1 rounded-sm">
+              Booked
+            </i>
           </h2>
           <ul>
             {userAppointments.length > 0 &&
@@ -180,17 +175,6 @@ export default function AppointmentCalendar({
           eventContent={renderEventContent}
           eventBackgroundColor="transparent"
           dateClick={handleDateClick}
-          // select={false}
-
-          // eventMouseEnter={(mouseEnterInfo) => {
-          //   let ele = mouseEnterInfo.el;
-          //   console.log(ele);
-          //   ele?.appendChild(<Options/>)
-          //   ele?.appendChild(ReactDOM.render(<Options />, document.createElement("div")));
-          // }}
-          //   eventClick={(clickInfo) => {
-          //     console.log(clickInfo);
-          //   }}
         />
 
         {isAddAppointmentVisible && (
