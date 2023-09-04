@@ -11,8 +11,8 @@ const AvailableSlotsBtn = ({
   duration: Number;
   dateAppointments: Appointment[];
   dateStr: string;
-  setEnd: (value: Date) => void;
-  setStart: (value: Date) => void;
+  setEnd?: (value: Date) => void;
+  setStart?: (value: Date) => void;
 }) => {
   const [buttons, setButtons] = useState<React.JSX.Element[]>([]);
   const [selectedButtons, setSelectedButtons] =
