@@ -24,9 +24,11 @@ export default async function Home() {
           className="my-4 md:my-0 block mx-auto"
         />
         {session && session.user.role === "USER" && (
-          <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">
-            Book an Appointment
-          </Skeleton>
+          <Link href="/book-appointment">
+            <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">
+              Book an Appointment
+            </Skeleton>
+          </Link>
         )}
         {session && session.user.role === "ADMIN" && (
           <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">

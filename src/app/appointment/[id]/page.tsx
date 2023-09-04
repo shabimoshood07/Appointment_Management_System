@@ -2,16 +2,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { DataTable } from "@/components/data-table";
+import { columns } from "@/components/Column";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
@@ -36,45 +28,19 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
     );
 
-  console.log(appointment);
+  const formattedData = {
+    ...appointment,
+    date: new Date(appointment?.date).toDateString(),
+    start: new Date(appointment?.start).toLocaleTimeString(),
+    end: new Date(appointment?.end).toLocaleTimeString(),
+  };
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-[98%] max-w-6xl mx-auto">
       <h1 className="text-center w-full text-slate-300 my-4 text-[25px] md:text-[35px] lg:text-[40px] ">
         Appointment details
       </h1>
 
-      <Table className="border text-slate-300">
-        <TableHeader>
-          <TableRow className="!text-slate-300">
-            <TableHead className="text-slate-300  w-[300px]">Title</TableHead>
-            <TableHead className="text-slate-300  text-center">Date</TableHead>
-            <TableHead className="text-slate-300  text-center">Start</TableHead>
-            <TableHead className="text-slate-300  text-center">End</TableHead>
-            <TableHead className="text-slate-300  text-center">
-              Status
-            </TableHead>
-            <TableHead className="text-slate-300  text-center">
-              Actions
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow key={appointment.id}>
-            <TableCell className=" text-left">{appointment.title}</TableCell>
-            <TableCell className=" text-center">{appointment.date}</TableCell>
-            <TableCell className=" text-center">
-              {appointment.start.toLocaleTimeString()}
-            </TableCell>
-            <TableCell className=" text-center">
-              {appointment.end.toLocaleTimeString()}
-            </TableCell>
-            <TableCell className=" text-center">{appointment.status}</TableCell>
-            <TableCell className=" text-center">
-              <button>delete</button> <button>edit</button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <DataTable columns={columns} data={[formattedData]} />
     </div>
   );
 };

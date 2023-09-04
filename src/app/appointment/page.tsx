@@ -1,4 +1,4 @@
-import { Payment, columns } from "@/components/Column";
+import { columns } from "@/components/Column";
 import { DataTable } from "@/components/data-table";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
@@ -20,7 +20,10 @@ const page = async () => {
   });
 
   return (
-    <div className="max-w-6xl mx-auto py-10">
+    <div className=" w-[98%] max-w-6xl mx-auto py-10">
+      <h1 className="text-center w-full text-slate-300 my-4 text-[25px] md:text-[35px] lg:text-[40px] ">
+        Your Appointments
+      </h1>
       <DataTable columns={columns} data={formattedData} />
     </div>
   );
