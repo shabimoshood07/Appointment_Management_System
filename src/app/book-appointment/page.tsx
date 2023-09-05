@@ -1,6 +1,14 @@
 import CalendarComp from "@/components/Calendar";
+import { getAllAppointments } from "@/lib/actions";
 
 const page = async () => {
+
+  // const appointments = await getAllAppointments();
+  // setDateAppointments(() => {
+  //   return appointments.filter((appt) => appt.date === dateStr);
+  // });
+
+  // console.log("appointments", appointments);
     
   return (
     <div className="w-[98%] max-w-6xl mx-auto">

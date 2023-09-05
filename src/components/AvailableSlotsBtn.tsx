@@ -18,6 +18,8 @@ const AvailableSlotsBtn = ({
   const [selectedButtons, setSelectedButtons] =
     useState<React.JSX.Element | null>(null);
 
+  const [dateAppointment, setDateAppointment] = useState(dateAppointments);
+
   const startTime = new Date("Thu Aug 24 2023 08:00:00 GMT+0100");
   const endTime = new Date("Thu Aug 24 2023 18:00:00 GMT+0100");
 
@@ -110,7 +112,7 @@ const AvailableSlotsBtn = ({
     }
 
     setButtons(btns);
-  }, [duration]);
+  }, [duration, dateAppointments]);
 
   if (buttons.length > 0) {
     return (
@@ -131,8 +133,9 @@ const AvailableSlotsBtn = ({
                 let en = new Date(
                   e.currentTarget.value.split("-")[1] + "" + date
                 );
-                setEnd(en);
-                setStart(st);
+                console.log(en, st, date);
+                setEnd?.(en);
+                setStart?.(st);
                 setSelectedButtons(btn);
               }}
               value={btn.props.children}

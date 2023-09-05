@@ -32,6 +32,8 @@ const AddAppointment = ({
   openD: boolean;
   setOpenD: (value: boolean) => void;
 }) => {
+
+
   const [title, setTitle] = useState<string>("");
   const [end, setEnd] = useState<((value: Date) => void) | null>();
   const [start, setStart] = useState<((value: Date) => void) | null>();
@@ -46,7 +48,7 @@ const AddAppointment = ({
     setTitle("");
   }, [openD]);
 
-  const handleSbmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!start || !end || !title) {
       return toast({
@@ -94,7 +96,7 @@ const AddAppointment = ({
       defaultOpen={openD}
     >
       <DialogContent className="bg-slate-300 border-2 border-red-700 !w-98% !max-w-2xl">
-        <form className="space-y-6" onSubmit={handleSbmit}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <h1>{new Date(data.date).toDateString()}</h1>
           <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">

@@ -6,7 +6,7 @@ import { prisma } from "./prisma";
 import { revalidatePath } from "next/cache";
 
 export const getAllAppointments = async () => {
-    const res = await fetch(process.env.URL + "/api/appointment/");
+    const res = await fetch(process.env.URL + "/api/appointment");
     const { appointments } = await res.json();
     return appointments;
 };

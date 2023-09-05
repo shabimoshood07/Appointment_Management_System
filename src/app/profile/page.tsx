@@ -22,6 +22,8 @@ const Profile = async () => {
     userAppointments = getUserAppointment.value;
   }
 
+
+
   // if (getAllAppointment.status === "rejected"){
   //   console.log(getAllAppointment.reason);
 
