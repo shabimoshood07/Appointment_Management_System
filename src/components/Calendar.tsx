@@ -24,6 +24,7 @@ const CalendarComp = () => {
   const [duration, setDuration] = useState<Number>(30);
   const [loading, setLoading] = useState(false);
   const [dateAppointments, setDateAppointments] = useState([]);
+  // const [date, setDate] = useState<Date | null>(null);
   const [date, setDate] = useState<Date>(new Date());
 
   const router = useRouter();
@@ -40,63 +41,74 @@ const CalendarComp = () => {
     setStart(null);
     setEnd(null);
     setTitle("");
-    setDate(new Date());
+    // setDate(new Date());
   }, []);
 
+  const formatDateToString = (date: Date) => {
+    let year = String(date.getFullYear());
+    let month = String(date.getMonth() + 1);
+    month = month.padStart(2, "0");
+    // let day = String(date.getDate().toFixed(2));
+    let day = String(date.getDate());
+    day = day.padStart(2, "0");
+    let formattedDate = year + "-" + month + "-" + day;
+    console.log("formattedDate", formattedDate);
+    return formattedDate;
+  };
+
   useEffect(() => {
-    getDateAppointments(date?.toISOString().split("T")[0]);
-    console.log("dateappointments", dateAppointments);
+    if (date) {
+      const formattedDate = formatDateToString(date);
+      getDateAppointments(formattedDate);
+    }
+
     // console.log("appointments", appointments);
   }, [date]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("data", date);
-    console.log("data", date?.toISOString());
-    console.log("data", date?.toISOString().split("T")[0]);
-    console.log("data", date?.toLocaleDateString("en-US").split("/").join("-"));
-    // console.log("data", date?.toLocaleString("en-US", { timeZone: "local" }));
+    if (!start || !end || !title) {
+      return toast({
+        title: "Error",
+        description: "Pick a duration",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
+    setLoading(true);
 
-    // if (!start || !end || !title) {
-    //   return toast({
-    //     title: "Error",
-    //     description: "Pick a duration",
-    //     variant: "destructive",
-    //     duration: 2000,
-    //   });
-    // }
-    // setLoading(true);
+    try {
+      const res = await fetch("/api/appointment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ start, end, title, date }),
+      });
 
-    // try {
-    //   const res = await fetch("/api/appointment", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ start, end, title, date }),
-    //   });
-
-    //   toast({
-    //     title: "Success",
-    //     description: "Appointment booked successfully",
-    //     duration: 2000,
-    //   });
-    //   router.refresh();
-    //   setLoading(false);
-    // } catch (error) {
-    //   toast({
-    //     title: "Erro",
-    //     description: "something went wrong",
-    //     variant: "destructive",
-    //     duration: 3000,
-    //   });
-    //   setLoading(false);
-    // }
+      toast({
+        title: "Success",
+        description: "Appointment booked successfully",
+        duration: 2000,
+      });
+      router.refresh();
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "something went wrong",
+        variant: "destructive",
+        duration: 3000,
+      });
+      setLoading(false);
+    }
   };
-  // console.log("data", date?.toISOString().split("T")[0]);
 
   return (
-    <form onSubmit={handleSubmit} className="bg-slate-300">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-slate-300 flex flex-col  px-2 w-[98%] mx-auto my-4 rounded-md"
+    >
       <div>
         <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
           Appointment duration
@@ -139,33 +151,38 @@ const CalendarComp = () => {
         </div>
       </div>
 
-      <Calendar
-        mode="single"
-        selected={date}
-        // selected={date?.toISOString().split("T")[0]}
-        onSelect={setDate}
+      <div>
+        <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
+          Select a date
+        </label>
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          className="rounded-md border shadow bg-green-950 text-slate-300 w-fit"
+        />
+      </div>
 
-        className="rounded-md border shadow bg-slate-300 w-fit"
-      />
-
-
-      <input type="date" />
-
-      <AvailableSlotsBtn
-        duration={duration}
-        dateStr={date?.toISOString().split("T")[0]}
-        // dateStr={date?.toDateString()}
-        dateAppointments={dateAppointments}
-        setEnd={(value: Date | ((value: Date) => void) | undefined) =>
-          setEnd(() => value)
-        }
-        setStart={(value: Date | ((value: Date) => void) | undefined) =>
-          setStart(() => value)
-        }
-      />
+      {date && (
+        <div>
+          <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
+            Available Slots
+          </label>
+          <AvailableSlotsBtn
+            duration={duration}
+            dateStr={formatDateToString(date)}
+            dateAppointments={dateAppointments}
+            setEnd={(value: Date | ((value: Date) => void) | undefined) =>
+              setEnd(() => value)
+            }
+            setStart={(value: Date | ((value: Date) => void) | undefined) =>
+              setStart(() => value)
+            }
+          />
+        </div>
+      )}
 
       <button type="submit">submit</button>
-      {/* <AddAppointment /> */}
     </form>
   );
 };
