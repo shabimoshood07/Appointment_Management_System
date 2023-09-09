@@ -26,10 +26,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/");
-  }
-  const userId = session.user.id;
+  const userId = session?.user.id;
   const data = await request.json();
   const newAppointment = await prisma.appointment.create({
     data: {
@@ -37,7 +34,5 @@ export async function POST(request: Request) {
       userId,
     },
   });
-
-  revalidatePath("/profile");
   return NextResponse.json(newAppointment);
 }

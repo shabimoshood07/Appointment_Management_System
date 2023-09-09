@@ -5,6 +5,9 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { getUserAppointments } from "@/lib/actions";
 
+// export const dynamic = 'force-dynamic' 
+export const revalidate = 0
+
 const page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/login");

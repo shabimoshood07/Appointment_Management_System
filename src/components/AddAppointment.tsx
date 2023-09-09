@@ -32,8 +32,6 @@ const AddAppointment = ({
   openD: boolean;
   setOpenD: (value: boolean) => void;
 }) => {
-
-
   const [title, setTitle] = useState<string>("");
   const [end, setEnd] = useState<((value: Date) => void) | null>();
   const [start, setStart] = useState<((value: Date) => void) | null>();

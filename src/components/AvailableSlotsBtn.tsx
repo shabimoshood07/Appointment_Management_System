@@ -18,8 +18,6 @@ const AvailableSlotsBtn = ({
   const [selectedButtons, setSelectedButtons] =
     useState<React.JSX.Element | null>(null);
 
-  // const [dateAppointment, setDateAppointment] = useState(dateAppointments);
-
   const startTime = new Date("Thu Aug 24 2023 08:00:00 GMT+0100");
   const endTime = new Date("Thu Aug 24 2023 18:00:00 GMT+0100");
 
@@ -44,18 +42,18 @@ const AvailableSlotsBtn = ({
     while (currentTime < endTime) {
       const nextTime = new Date(
         currentTime.getTime() + Number(duration) * 60000
-        );
-        
-        const buttonText = `${currentTime.toLocaleTimeString([], {
+      );
+
+      const buttonText = `${currentTime.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       })} - ${nextTime.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       })}`;
-      
+
       let isBooked = false;
-      
+
       if (dateAppointments.length > 0) {
         const formatted = dateAppointments.map((app: Appointment) => {
           return { ...app, start: form(app.start), end: form(app.end) };
@@ -123,7 +121,7 @@ const AvailableSlotsBtn = ({
               type={btn.type}
               key={index}
               className={`py-2 disabled:opacity-20 cursor-pointer disabled:cursor-default text-[10px] md:text-sm text-slate-300 w-full rounded-sm bg-green-950 ${
-                selectedButtons === btn ? "!bg-green-800" : ""
+                selectedButtons === btn ? "!bg-green-300 !text-green-950" : ""
               }`}
               onClick={(e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
                 let date = dateStr;
