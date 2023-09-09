@@ -1,8 +1,8 @@
-"use client"; // Error components must be Client Components
+"use client"; 
 
 import { useEffect } from "react";
 
-const page = ({
+const Page = ({
   error,
   reset,
 }: {
@@ -20,4 +20,4 @@ const page = ({
   );
 };
 
-export default page;
+export default Page;

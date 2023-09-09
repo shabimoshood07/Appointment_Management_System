@@ -74,7 +74,7 @@ const Navbar = async () => {
                     if (link.name === "Profile") {
                       return (
                         <>
-                          <Link href={link.href}>
+                          <Link href={link.href} key={index}>
                             <MenubarItem
                               className="cursor-pointer hover:!bg-green-500"
                               key={index}
@@ -102,7 +102,7 @@ const Navbar = async () => {
                     }
                     return (
                       <>
-                        <Link href={link.href}>
+                        <Link href={link.href} key={index}>
                           <MenubarItem
                             className="cursor-pointer hover:!bg-green-500"
                             key={index}
@@ -184,7 +184,7 @@ const Navbar = async () => {
                   );
                 }
                 return (
-                  <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center">
+                  <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center" key={index}>
                     <Link href={link.href}>
                       <TooltipProvider delayDuration={100}>
                         <Tooltip>

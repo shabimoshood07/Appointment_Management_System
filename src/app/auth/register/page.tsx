@@ -7,8 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
-
-const Register = async() => {
+const Register = async () => {
   const session = await getServerSession(authOptions);
   if (session) redirect("/");
   return (
@@ -23,7 +22,10 @@ const Register = async() => {
         <div>
           <AuthProviderBtn />
           <p className="w-full text-right mt-4 text-slate-300 text-sm">
-            Don't have an account? <Link href="/auth/login" className="text-base">Login</Link>
+            Don&apos;t have an account?
+            <Link href="/auth/login" className="text-base">
+              Login
+            </Link>
           </p>
         </div>
       </div>
