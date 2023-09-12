@@ -131,7 +131,6 @@ const AvailableSlotsBtn = ({
                 let en = new Date(
                   e.currentTarget.value.split("-")[1] + "" + date
                 );
-                console.log(en, st, date);
                 setEnd?.(en);
                 setStart?.(st);
                 setSelectedButtons(btn);

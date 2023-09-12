@@ -44,9 +44,6 @@ export const authOptions: AuthOptions = {
         const user = await prisma.user.findUnique({
           where: { email },
         });
-
-        console.log("user", user);
-
         if (!user) throw new Error("No user found");
 
         if (user.password === null)

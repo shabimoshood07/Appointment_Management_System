@@ -7,8 +7,6 @@ type userData = {
 };
 
 export const registerUser = async (userData: userData) => {
-    console.log("userData", userData);
-    
   const newUser = await prisma.user.create({
     data: userData,
   });

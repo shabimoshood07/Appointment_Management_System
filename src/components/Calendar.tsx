@@ -63,8 +63,6 @@ const CalendarComp = ({
       const formattedDate = formatDateToString(date);
       getDateAppointments(formattedDate);
     }
-    console.log("dateAppointments", dateAppointments);
-    console.log(date, "date");
   }, [date]);
 
   const handleSubmit = async (e: React.FormEvent) => {

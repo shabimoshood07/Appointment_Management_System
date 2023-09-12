@@ -26,8 +26,6 @@ import { navlinks } from "@/lib/navlinks";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
-  console.log("session", session);
-
   return (
     <nav className="border-2 border-slate-200 bg-slate-200 px-2 py-2">
       <div className="flex justify-between items-center w-[98%] md:w-[90%] max-w-6xl mx-auto">

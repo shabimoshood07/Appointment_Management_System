@@ -8,14 +8,10 @@ export const login = async (formData: FormData) => {
     redirect: false,
     email: formData.get("email"),
     password: formData.get("password"),
-    // callbackUrl: "/",
-  }).then(({ ok, error }) => {
-    console.log(ok, error);
+  }).then(({ ok, error }: any) => {
     if (error) {
-      console.log("error", error);
       return error;
     } else {
-      console.log("error", error);
       return ok;
     }
   });
@@ -33,8 +29,6 @@ export const register = async (formData: FormData) => {
     }),
   });
 
-  console.log("res", res);
-
   if (res.status !== 201) {
     const data = await res.json();
     return data?.error;
@@ -46,13 +40,10 @@ export const register = async (formData: FormData) => {
     email: data.user.email,
     password: formData.get("password"),
     callbackUrl: "/",
-  }).then(({ ok, error }) => {
-    console.log(ok, error);
+  }).then(({ ok, error }: any) => {
     if (error) {
-      console.log("error", error);
       return error;
     } else {
-      console.log("ok", ok);
       return ok;
     }
   });
@@ -71,13 +62,8 @@ export async function handleSubmit(e: FormEvent) {
       password: form.get("password"),
     }),
   });
-
-  console.log("res", res);
-
   const data = await res.json();
-  console.log("data", data);
   if (!data.user) return null;
-
   await signIn("credentials", {
     email: data.user.email,
     password: form.get("password"),

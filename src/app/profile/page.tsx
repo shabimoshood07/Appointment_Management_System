@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { getAllAppointments, getUserAppointments } from "@/lib/actions";
 import { prisma } from "@/lib/prisma";
 
-// export const dynamic = 'force-dynamic'
-export const revalidate = 0;
+export const dynamic = 'force-dynamic'
+// export const revalidate = 0;
 const Profile = async () => {
   // let allAppointments;
   // let userAppointments;
