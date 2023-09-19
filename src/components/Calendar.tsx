@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { getAllAppointments } from "@/lib/actions";
 
 const CalendarComp = ({
   allAppointments,

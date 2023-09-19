@@ -1,8 +1,8 @@
 import React from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Loader } from "lucide-react";
 
-const Loader = () => {
-  return <Loader2 />;
+const Loader1 = () => {
+  return <Loader size={400} className="text-slate-300" />;
 };
 
-export default Loader;
+export default Loader1;

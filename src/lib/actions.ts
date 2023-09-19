@@ -8,7 +8,6 @@ import { revalidatePath, revalidateTag } from "next/cache";
 export const getAllAppointments = async () => {
   const res = await fetch(process.env.URL + "/api/appointment", {
     cache: "no-store",
-    next: { tags: ["all"] },
   });
   const { appointments } = await res.json();
   return appointments;
@@ -17,7 +16,6 @@ export const getAllAppointments = async () => {
 export const getUserAppointments = async (id: string) => {
   const res = await fetch(process.env.URL + "/api/appointment/" + `${id}`, {
     cache: "no-store",
-    next: { tags: ["all"] },
   });
   const { userAppointments } = await res.json();
   return userAppointments;
