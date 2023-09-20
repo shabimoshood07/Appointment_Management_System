@@ -16,10 +16,12 @@ const AlertDialogComp = ({
   action,
   promptMessage,
   type,
+  heading,
 }: {
   action: () => Promise<void>;
-  promptMessage: string;
+  promptMessage?: string;
   type: "delete" | "edit";
+  heading?: string;
 }) => {
   return (
     <AlertDialog>
@@ -29,7 +31,7 @@ const AlertDialogComp = ({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>{heading}</AlertDialogTitle>
           <AlertDialogDescription>{promptMessage}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

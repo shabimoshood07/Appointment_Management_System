@@ -99,7 +99,7 @@ export const navlinks = [
     href: "/",
   },
   {
-    name: "Appointment",
+    name: "Appointments",
     icon: <AppointmentIcon />,
     href: "/appointment",
   },

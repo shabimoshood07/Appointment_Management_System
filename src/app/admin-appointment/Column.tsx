@@ -3,8 +3,24 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { deleteAppointment } from "@/lib/actions";
-import AlertDialogComp from "./AlertDialog";
-import { toast } from "./ui/use-toast";
+import AlertDialogComp from "@/components/AlertDialog";
+import { toast } from "@/components/ui/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type Appointment = {
   id: string;
@@ -18,12 +34,6 @@ export type Appointment = {
 const handleDelete = async (appoinmentId: string) => {
   try {
     await deleteAppointment(appoinmentId);
-    // await fetch(`/api/appointment/${appoinmentId}`, {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
     toast({
       title: "Successful",
       variant: "default",
@@ -87,6 +97,36 @@ export const columns: ColumnDef<Appointment>[] = [
     header: ({ column }) => {
       return <p className="text-center text-slate-300">Status</p>;
     },
+    cell: ({ row, column, cell }) => {
+      return <p className="text-center">{row.getValue("status")}</p>;
+
+      // (
+      //   <Select defaultValue={row.getValue("status")}>
+      //     <SelectTrigger className="w-[180px]">
+      //       <SelectValue placeholder={row.getValue("status")} />
+      //     </SelectTrigger>
+      //     <SelectContent>
+      //       <SelectItem value="light">Light</SelectItem>
+      //       <SelectItem value="dark">Dark</SelectItem>
+      //       <SelectItem value="system">System</SelectItem>
+      //     </SelectContent>
+      //   </Select>
+      // );
+
+      // (
+      //   <DropdownMenu>
+      //     <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+      //     <DropdownMenuContent>
+      //       <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      //       <DropdownMenuSeparator />
+      //       <DropdownMenuItem>Profile</DropdownMenuItem>
+      //       <DropdownMenuItem>Billing</DropdownMenuItem>
+      //       <DropdownMenuItem>Team</DropdownMenuItem>
+      //       <DropdownMenuItem>Subscription</DropdownMenuItem>
+      //     </DropdownMenuContent>
+      //   </DropdownMenu>
+      // );
+    },
   },
   {
     id: "actions",
@@ -95,10 +135,9 @@ export const columns: ColumnDef<Appointment>[] = [
       return (
         <>
           <AlertDialogComp
-            type="delete"
+            type="edit"
             action={() => handleDelete(appointment.id)}
-            promptMessage="Appointment will be deleted permanently"
-            heading="Are you sure?"
+            heading="Edit Appointment"
           />
         </>
       );

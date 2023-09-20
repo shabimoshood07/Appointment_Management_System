@@ -66,18 +66,28 @@ const Navbar = async () => {
                   />
                 </svg>
               </MenubarTrigger>
+
               {session ? (
                 <MenubarContent className="ml-[-9rem]  md:!hidden">
                   {navlinks.map((link, index) => {
                     if (link.name === "Profile") {
                       return (
                         <>
-                          <Link href={link.href} key={index}>
+                          <Link
+                            href={
+                              session.user.role === "USER"
+                                ? link.href
+                                : "admin-dashboard"
+                            }
+                            key={index}
+                          >
                             <MenubarItem
                               className="cursor-pointer hover:!bg-green-500"
                               key={index}
                             >
-                              {link.name}
+                              {session.user.role === "USER"
+                                ? link.name
+                                : "Admin Dashboard"}
                               <MenubarShortcut>
                                 {session?.user.image ? (
                                   <Image
@@ -91,6 +101,33 @@ const Navbar = async () => {
                                   <>{link.icon}</>
                                 )}
                               </MenubarShortcut>
+                            </MenubarItem>
+                          </Link>
+
+                          <MenubarSeparator />
+                        </>
+                      );
+                    }
+
+                    if (link.name === "Appointments") {
+                      return (
+                        <>
+                          <Link
+                            href={
+                              session.user.role === "USER"
+                                ? link.href
+                                : "admin-appointment"
+                            }
+                            key={index}
+                          >
+                            <MenubarItem
+                              className="cursor-pointer hover:!bg-green-500"
+                              key={index}
+                            >
+                              {session.user.role === "USER"
+                                ? link.name
+                                : "All Appointments"}
+                              <MenubarShortcut>{link.icon}</MenubarShortcut>
                             </MenubarItem>
                           </Link>
 
@@ -159,7 +196,13 @@ const Navbar = async () => {
                       <TooltipProvider delayDuration={100}>
                         <Tooltip>
                           <TooltipTrigger>
-                            <Link href={link.href}>
+                            <Link
+                              href={
+                                session.user.role === "USER"
+                                  ? link.href
+                                  : "/admin-dashboard"
+                              }
+                            >
                               {session?.user.image ? (
                                 <Image
                                   src={session?.user.image.toString()}
@@ -174,15 +217,48 @@ const Navbar = async () => {
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>{link.name}</p>
+                            <p>
+                              {session.user.role === "USER"
+                                ? link.name
+                                : "Admin Dashboard"}
+                            </p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                     </li>
                   );
                 }
+
+                if (link.name === "Appointments") {
+                  return (
+                    <li
+                      className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center"
+                      key={index}
+                    >
+                      <Link
+                        href={
+                          session.user.role === "USER"
+                            ? link.href
+                            : "admin-appointment"
+                        }
+                      >
+                        <TooltipProvider delayDuration={100}>
+                          <Tooltip>
+                            <TooltipTrigger>{link.icon}</TooltipTrigger>
+                            <TooltipContent>
+                              <p>{link.name}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </Link>
+                    </li>
+                  );
+                }
                 return (
-                  <li className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center" key={index}>
+                  <li
+                    className="text-[18px] text-green-950 cursor-pointer font-medium flex items-center"
+                    key={index}
+                  >
                     <Link href={link.href}>
                       <TooltipProvider delayDuration={100}>
                         <Tooltip>

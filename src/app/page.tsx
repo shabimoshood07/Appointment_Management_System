@@ -31,9 +31,11 @@ export default async function Home() {
           </Link>
         )}
         {session && session.user.role === "ADMIN" && (
-          <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">
-            View all Appointment
-          </Skeleton>
+          <Link href="/admin-appointment">
+            <Skeleton className="bg-slate-300 text-green-950 py-2 rounded-sm px-4 mx-auto block w-[95%] font-semibold sm:w-[50%] sm:text-xl md:text-2xl xl:w-full md:mt-6 text-center cursor-pointer">
+              View all Appointment
+            </Skeleton>
+          </Link>
         )}
 
         {!session && (
