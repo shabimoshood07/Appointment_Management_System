@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import EditForm from "@/components/EditForm";
 
 export type Appointment = {
   id: string;
@@ -29,6 +30,9 @@ export type Appointment = {
   start: string;
   end: string;
   status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
 };
 
 const handleDelete = async (appoinmentId: string) => {
@@ -132,13 +136,17 @@ export const columns: ColumnDef<Appointment>[] = [
     id: "actions",
     cell: ({ row }) => {
       const appointment = row.original;
+      // console.log("appointment", appointment);
+      // console.log("row", row);
+
       return (
         <>
-          <AlertDialogComp
+          {/* <AlertDialogComp
             type="edit"
             action={() => handleDelete(appointment.id)}
             heading="Edit Appointment"
-          />
+          /> */}
+          <EditForm appointment={appointment} />
         </>
       );
     },

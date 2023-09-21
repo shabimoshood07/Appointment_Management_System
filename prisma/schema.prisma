@@ -26,14 +26,6 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-// model Session {
-//   id           String   @id @default(cuid())
-//   sessionToken String   @unique
-//   userId       String
-//   expires      DateTime
-//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
-
 model User {
   id            String        @id @default(cuid())
   name          String?
@@ -43,7 +35,6 @@ model User {
   password      String?
   role          Role          @default(USER)
   accounts      Account[]
-  // sessions      Session[]
   Appointment   Appointment[]
 }
 
@@ -66,8 +57,7 @@ model Appointment {
 }
 
 enum AppointmentStatus {
-  CONFIRMED
-  PAID
-  CANCELLED
   PENDING
+  CONFIRMED
+  CANCELLED
 }

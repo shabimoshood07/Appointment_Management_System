@@ -11,6 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Edit2, Trash2Icon } from "lucide-react";
+import EditForm from "./EditForm";
 
 const AlertDialogComp = ({
   action,
@@ -31,13 +32,15 @@ const AlertDialogComp = ({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{heading}</AlertDialogTitle>
+          <AlertDialogTitle className="text-green-950">
+            {heading}
+          </AlertDialogTitle>
           <AlertDialogDescription>{promptMessage}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={() => action()}>
-            Continue
+            {type === "delete" ? "Continue" : "Update"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

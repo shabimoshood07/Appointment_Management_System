@@ -10,4 +10,3 @@ type Appointment = {
     date: string
 };
 
-declare module 'cronofy-elements';

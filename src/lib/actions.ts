@@ -50,3 +50,21 @@ export const deleteAppointment = async (appointmentId: string) => {
 //     console.log("error", error);
 //   }
 // };
+
+export const handleSubmit = async (formData: FormData, appointmentId:string) => {
+  console.log(formData);
+
+  const data = {};
+  for (const [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+  console.log(data);
+
+  const res = await fetch( process.env.URL + "/api/appointment/" + `${appointmentId}`, {
+    method: "PATCH",
+    body: JSON.stringify(data.status),
+  });
+  const { message } = await res.json();
+  revalidatePath("/admin-appointment");
+  return message;
+};

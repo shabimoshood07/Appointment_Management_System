@@ -54,3 +54,30 @@ export async function DELETE(
     );
   }
 }
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    const id = params.id;
+    const data = await request.json();
+    await prisma.appointment.update({
+      data: {
+        ...data,
+      },
+      where: {
+        id,
+      },
+    });
+    return NextResponse.json(
+      { message: "Appointment Updated successfully" },
+      { status: 200, statusText: "ok" }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500, statusText: "Something went wrong" }
+    );
+  }
+}
