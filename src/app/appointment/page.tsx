@@ -13,22 +13,6 @@ const page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/login");
   const data = await getUserAppointments(session.user.id);
-
-  // const myData = await prisma.appointment.findMany({
-  //   where: {
-  //     userId: session.user.id,
-  //   },
-  // });
-
-  // const res = await fetch(
-  //   process.env.URL + "/api/appointment/" + `${session.user.id}`,
-  //   {
-  //     cache: "no-store",
-  //     next: { tags: ["all"] },
-  //   }
-  // );
-  // const { userAppointments } = await res.json();
-
   const formattedData = data.map((appt: Appointment) => {
     return {
       ...appt,

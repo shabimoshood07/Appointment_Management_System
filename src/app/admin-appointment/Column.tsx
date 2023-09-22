@@ -103,49 +103,14 @@ export const columns: ColumnDef<Appointment>[] = [
     },
     cell: ({ row, column, cell }) => {
       return <p className="text-center">{row.getValue("status")}</p>;
-
-      // (
-      //   <Select defaultValue={row.getValue("status")}>
-      //     <SelectTrigger className="w-[180px]">
-      //       <SelectValue placeholder={row.getValue("status")} />
-      //     </SelectTrigger>
-      //     <SelectContent>
-      //       <SelectItem value="light">Light</SelectItem>
-      //       <SelectItem value="dark">Dark</SelectItem>
-      //       <SelectItem value="system">System</SelectItem>
-      //     </SelectContent>
-      //   </Select>
-      // );
-
-      // (
-      //   <DropdownMenu>
-      //     <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-      //     <DropdownMenuContent>
-      //       <DropdownMenuLabel>My Account</DropdownMenuLabel>
-      //       <DropdownMenuSeparator />
-      //       <DropdownMenuItem>Profile</DropdownMenuItem>
-      //       <DropdownMenuItem>Billing</DropdownMenuItem>
-      //       <DropdownMenuItem>Team</DropdownMenuItem>
-      //       <DropdownMenuItem>Subscription</DropdownMenuItem>
-      //     </DropdownMenuContent>
-      //   </DropdownMenu>
-      // );
     },
   },
   {
     id: "actions",
     cell: ({ row }) => {
       const appointment = row.original;
-      // console.log("appointment", appointment);
-      // console.log("row", row);
-
       return (
         <>
-          {/* <AlertDialogComp
-            type="edit"
-            action={() => handleDelete(appointment.id)}
-            heading="Edit Appointment"
-          /> */}
           <EditForm appointment={appointment} />
         </>
       );

@@ -7,7 +7,10 @@ import { revalidatePath, revalidateTag } from "next/cache";
 
 export const getAllAppointments = async () => {
   const res = await fetch(process.env.URL + "/api/appointment", {
-    cache: "no-store",
+    cache: "no-cache",
+    next: {
+      tags: ["allAppointments"],
+    },
   });
   const { appointments } = await res.json();
   return appointments;
@@ -15,7 +18,10 @@ export const getAllAppointments = async () => {
 
 export const getUserAppointments = async (id: string) => {
   const res = await fetch(process.env.URL + "/api/appointment/" + `${id}`, {
-    cache: "no-store",
+    cache: "no-cache",
+    next: {
+      tags: ["allAppointments"],
+    },
   });
   const { userAppointments } = await res.json();
   return userAppointments;
@@ -29,9 +35,8 @@ export const deleteAppointment = async (appointmentId: string) => {
         method: "DELETE",
       }
     );
-    revalidatePath("/profile");
+    revalidateTag("allAppointments");
     revalidatePath("/appointment");
-    revalidateTag("all");
   } catch (error) {
     console.log("error", error);
   }
@@ -51,19 +56,25 @@ export const deleteAppointment = async (appointmentId: string) => {
 //   }
 // };
 
-export const handleSubmit = async (formData: FormData, appointmentId:string) => {
+export const handleSubmit = async (
+  formData: FormData,
+  appointmentId: string
+) => {
   console.log(formData);
 
   const data = {};
-  for (const [key, value] of formData.entries()) {
-    data[key] = value;
-  }
-  console.log(data);
+  // for (const [key, value] of formData.entries()) {
+  //   data[key] = value;
+  // }
+  // console.log(data);
 
-  const res = await fetch( process.env.URL + "/api/appointment/" + `${appointmentId}`, {
-    method: "PATCH",
-    body: JSON.stringify(data.status),
-  });
+  const res = await fetch(
+    process.env.URL + "/api/appointment/" + `${appointmentId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }
+  );
   const { message } = await res.json();
   revalidatePath("/admin-appointment");
   return message;

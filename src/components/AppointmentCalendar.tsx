@@ -88,9 +88,6 @@ export default function AppointmentCalendar({
         )}
       </>
     );
-    // return (
-    //   <AppointmentHoverCard appointmentId={appointmentId} userId={userId} />
-    // );
   }
 
   return (
@@ -100,7 +97,6 @@ export default function AppointmentCalendar({
           <h2 className="font-bold">Instructions</h2>
           <ul className="!list-disc">
             <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
             <li>Click an event to delete it</li>
           </ul>
         </div>
@@ -164,7 +160,7 @@ export default function AppointmentCalendar({
           weekends={weekendsVisible}
           nowIndicator={true}
           editable={true}
-          // selectable={true}
+          droppable={false}
           selectMirror={true}
           resources={[
             { id: "a", title: "Auditorium A" },

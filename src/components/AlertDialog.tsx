@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Edit2, Trash2Icon } from "lucide-react";
-import EditForm from "./EditForm";
+
 
 const AlertDialogComp = ({
   action,

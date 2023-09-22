@@ -77,6 +77,7 @@ const AddAppointment = ({
       setOpenD(false);
       setLoading(false);
     } catch (error) {
+      console.log("error", error);
       toast({
         title: "Erro",
         description: "something went wrong",
