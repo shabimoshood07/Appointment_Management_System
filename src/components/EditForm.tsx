@@ -45,7 +45,17 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
         </AlertDialogHeader>
         <form
           className="space-y-6"
-          action={() => handleSubmit(new FormData(), appointment.id)}
+          action={handleSubmit}
+          // action={() => {
+          //   const formData = new FormData();
+          //   formData.append("title", appointment.title);
+          //   formData.append("start", appointment.start);
+          //   formData.append("end", appointment.end);
+          //   formData.append("id", appointment.end);
+          //   // Add other form data fields if needed
+
+          //   handleSubmit(formData, appointment.id);
+          // }}
         >
           <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">

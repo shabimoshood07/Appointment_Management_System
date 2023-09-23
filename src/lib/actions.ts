@@ -57,8 +57,8 @@ export const deleteAppointment = async (appointmentId: string) => {
 // };
 
 export const handleSubmit = async (
-  formData: FormData,
-  appointmentId: string
+  formData: FormData
+  // appointmentId: string
 ) => {
   console.log(formData);
 
@@ -68,14 +68,14 @@ export const handleSubmit = async (
   // }
   // console.log(data);
 
-  const res = await fetch(
-    process.env.URL + "/api/appointment/" + `${appointmentId}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }
-  );
-  const { message } = await res.json();
-  revalidatePath("/admin-appointment");
-  return message;
+  // const res = await fetch(
+  //   process.env.URL + "/api/appointment/" + `${appointmentId}`,
+  //   {
+  //     method: "PATCH",
+  //     body: JSON.stringify(data),
+  //   }
+  // );
+  // const { message } = await res.json();
+  // revalidatePath("/admin-appointment");
+  // return message;
 };
