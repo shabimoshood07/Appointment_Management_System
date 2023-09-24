@@ -50,9 +50,17 @@ List the ready features here:
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
+### environmental variables
+- DATABASE_URL
+- URL
+- NEXTAUTH_URL
+- GITHUB_SECRET
+- GITHUB_ID
+- NEXTAUTH_URL_INTERNAL
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+- NEXTAUTH_SECRET
+- JWT_SECRET
 ## Available Scripts
 
 ### `npm install`
