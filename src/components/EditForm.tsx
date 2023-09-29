@@ -70,6 +70,14 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
                 value={appointment.title}
                 readOnly
               />
+              <input
+                id="id"
+                name="id"
+                type="text"
+                className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
+                value={appointment.id}
+                readOnly
+              />
             </div>
           </div>
           <div>

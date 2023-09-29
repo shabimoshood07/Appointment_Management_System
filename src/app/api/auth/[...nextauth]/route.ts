@@ -21,9 +21,9 @@ export const authOptions: AuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      httpOptions: {
-        timeout: 40000,
-      },
+      // httpOptions: {
+      //   timeout: 40000,
+      // },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -59,12 +59,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      try {
-        return true;
-      } catch (error) {
-        console.log("callback error", error);
-        return;
-      }
+      return true;
     },
     async redirect({ url, baseUrl }) {
       return baseUrl;
