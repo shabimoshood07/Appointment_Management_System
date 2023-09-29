@@ -36,6 +36,7 @@ const page = async () => {
         session={session}
         allAppointments={allAppointments}
         userAppointments={userAppointments}
+        role="USER"
       />
     </>
   );

@@ -24,7 +24,7 @@ export const getUserAppointments = async (id: string) => {
   return userAppointments;
 };
 
-export const deleteAppointment = async (appointmentId: string) => {
+export const deleteAppointment = async (appointmentId: string, path: string) => {
   try {
     const res = await fetch(
       process.env.URL + "/api/appointment/" + `${appointmentId}`,
@@ -33,7 +33,7 @@ export const deleteAppointment = async (appointmentId: string) => {
       }
     );
     revalidateTag("allAppointments");
-    revalidatePath("/appointment");
+    revalidatePath(`/${path}`);
   } catch (error) {
     console.log("error", error);
   }

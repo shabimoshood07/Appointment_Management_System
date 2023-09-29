@@ -15,10 +15,12 @@ export default function AppointmentCalendar({
   session,
   allAppointments,
   userAppointments,
+  role,
 }: {
   session: Session;
   allAppointments: Appointment[];
-  userAppointments: Appointment[];
+  userAppointments?: Appointment[];
+  role: "ADMIN" | "USER";
 }) {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [dateAppointments, setDateAppointments] = useState<Appointment[] | []>(
@@ -70,79 +72,111 @@ export default function AppointmentCalendar({
     let appointmentId = eventInfo.event._def.extendedProps.userId;
     let userId = session.user.id;
     let id = eventInfo.event._def.publicId;
-    return (
-      <>
-        {appointmentId === userId ? (
-          <Link
-            href={`/appointment/${id}`}
-            className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm"
-          >
-            <i className="w-full text-center text-green-950 block text-[12px] ">
+    if (role === "USER") {
+      return (
+        <>
+          {appointmentId === userId ? (
+            <Link
+              href={`/appointment/${id}`}
+              className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm"
+            >
+              <i className="w-full text-center text-green-950 block text-[12px] ">
+                Booked!
+              </i>
+            </Link>
+          ) : (
+            <i className="w-full h-full text-center text-green-950  bg-red-500 cursor-default flex items-center justify-center text-[12px] rounded-sm">
               Booked!
             </i>
-          </Link>
-        ) : (
-          <i className="w-full h-full text-center text-green-950  bg-red-500 cursor-default flex items-center justify-center text-[12px] rounded-sm">
-            Booked!
-          </i>
-        )}
-      </>
-    );
+          )}
+        </>
+      );
+    }
+
+    if (role === "ADMIN") {
+      return (
+        <>
+          {appointmentId === userId ? (
+            <Link
+              href={`/admin-appointment/${id}`}
+              className="w-full bg-green-400 flex justify-center items-center h-full rounded-sm"
+            >
+              <i className="w-full text-center text-green-950 block text-[12px] ">
+                ADMIN!
+              </i>
+            </Link>
+          ) : (
+            <Link
+              href={`/admin-appointment/${id}`}
+              className=" w-full bg-green-400 flex justify-center items-center h-full rounded-sm"
+            >
+              <i className="w-full text-center rounded-sm text-green-950 bg-red-500 block text-[12px] ">
+                Booked!
+              </i>
+            </Link>
+          )}
+        </>
+      );
+    }
   }
 
   return (
     <div className="demo-app flex flex-col items-center py-4 md:p-0 md:flex-row md:items-start md:min-h-[calc(100vh-60px)] max-w-6xl mx-auto gap-8 !text-slate-300 ">
-      <div className="demo-app-sidebar w-full max-w-[400px] mx-auto self-stretch !bg-slate-300 !text-green-950">
-        <div className="demo-app-sidebar-section !ml-10">
-          <h2 className="font-bold">Instructions</h2>
-          <ul className="!list-disc">
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div>
+      {userAppointments && (
+        <div className="demo-app-sidebar w-full max-w-[400px] mx-auto self-stretch !bg-slate-300 !text-green-950">
+          <div className="demo-app-sidebar-section !ml-10">
+            <h2 className="font-bold">Instructions</h2>
+            <ul className="!list-disc">
+              <li>
+                Select dates and you will be prompted to create a new event
+              </li>
+              <li>Click an event to delete it</li>
+            </ul>
+          </div>
 
-        <div className="demo-app-sidebar-section p-0">
-          <label>
-            <input
-              type="checkbox"
-              checked={weekendsVisible}
-              onChange={handleWeekendsToggle}
-            ></input>
-            toggle weekends
-          </label>
-        </div>
-        <div className="demo-app-sidebar-section ">
-          <h2 className="font-bold  mb-4 flex items-center gap-2 underline">
-            Your Appointments ({userAppointments.length})
-            <i className="bg-green-300 text-[10px] px-2 py-1 rounded-sm">
-              Booked
-            </i>
-          </h2>
-          <ul>
-            {userAppointments.length > 0 &&
-              userAppointments.map((event) => {
-                let date = new Date(event.start);
+          <div className="demo-app-sidebar-section p-0">
+            <label>
+              <input
+                type="checkbox"
+                checked={weekendsVisible}
+                onChange={handleWeekendsToggle}
+              ></input>
+              toggle weekends
+            </label>
+          </div>
+          <div className="demo-app-sidebar-section ">
+            <h2 className="font-bold  mb-4 flex items-center gap-2 underline">
+              Your Appointments ({userAppointments.length})
+              <i className="bg-green-300 text-[10px] px-2 py-1 rounded-sm">
+                Booked
+              </i>
+            </h2>
+            <ul>
+              {userAppointments?.length > 0 &&
+                userAppointments.map((event) => {
+                  let date = new Date(event.start);
 
-                return (
-                  <li key={event.id} className="my-2">
-                    <b>
-                      {formatDate(date, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </b>
-                    <i>
-                      {event.title} {event.status}
-                    </i>
-                  </li>
-                );
-              })}
-          </ul>
+                  return (
+                    <li key={event.id} className="my-2">
+                      <b>
+                        {formatDate(date, {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </b>
+                      <i>
+                        {event.title} {event.status}
+                      </i>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="demo-app-main p-2  mx-auto w-full md:p-2 bg-green-800">
+      <div className="demo-app-main p-2  mx-auto w-full md:p-4 bg-green-800">
         <FullCalendar
           plugins={[
             resourceTimelinePlugin,

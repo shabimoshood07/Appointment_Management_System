@@ -17,19 +17,15 @@ export type Appointment = {
 
 const handleDelete = async (appoinmentId: string) => {
   try {
-    await deleteAppointment(appoinmentId);
-    // await fetch(`/api/appointment/${appoinmentId}`, {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    await deleteAppointment(appoinmentId, "admin-appointment");
     toast({
       title: "Successful",
       variant: "default",
       description: "Appointment deleted successfully",
     });
   } catch (error) {
+    console.log("delete error", error);
+
     toast({
       variant: "destructive",
       description: "Something went wrong",
@@ -95,7 +91,7 @@ export const columns: ColumnDef<Appointment>[] = [
       return (
         <>
           <AlertDialogComp
-            type="delete"
+            // type="delete"
             action={() => handleDelete(appointment.id)}
             promptMessage="Appointment will be deleted permanently"
             heading="Are you sure?"

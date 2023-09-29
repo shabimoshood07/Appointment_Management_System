@@ -37,7 +37,7 @@ export type Appointment = {
 
 const handleDelete = async (appoinmentId: string) => {
   try {
-    await deleteAppointment(appoinmentId);
+    await deleteAppointment(appoinmentId, "appointment");
     toast({
       title: "Successful",
       variant: "default",
@@ -54,7 +54,7 @@ const handleDelete = async (appoinmentId: string) => {
 export const columns: ColumnDef<Appointment>[] = [
   {
     accessorKey: "title",
-    header: ({ column }) => {
+    header: () => {
       return <p className="text-left text-slate-300">Title</p>;
     },
     cell: ({ row }) => {
@@ -110,9 +110,14 @@ export const columns: ColumnDef<Appointment>[] = [
     cell: ({ row }) => {
       const appointment = row.original;
       return (
-        <>
+        <div className="flex gap-4 justify-center">
           <EditForm appointment={appointment} />
-        </>
+          <AlertDialogComp
+            action={() => handleDelete(appointment.id)}
+            promptMessage="Appointment will be deleted permanently"
+            heading="Are you sure?"
+          />
+        </div>
       );
     },
   },

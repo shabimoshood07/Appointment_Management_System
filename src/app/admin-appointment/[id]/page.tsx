@@ -4,16 +4,20 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { columns } from "../Column";
+import { getAllAppointments } from "@/lib/actions";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const session = await getServerSession(authOptions);
   if (!session) redirect("/auth/login");
+  if (session.user.role === "USER") redirect("/");
+  await getAllAppointments();
   const appointment = await prisma.appointment.findUnique({
     where: {
       id: id,
     },
   });
+
 
   if (!appointment)
     return (

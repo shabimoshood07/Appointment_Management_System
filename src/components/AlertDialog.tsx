@@ -12,35 +12,40 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Edit2, Trash2Icon } from "lucide-react";
 
-
 const AlertDialogComp = ({
   action,
   promptMessage,
-  type,
+  // type,
   heading,
 }: {
   action: () => Promise<void>;
   promptMessage?: string;
-  type: "delete" | "edit";
+  // type: "delete" | "edit";
   heading?: string;
 }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        {type === "delete" && <Trash2Icon className="text-red-500" />}
-        {type === "edit" && <Edit2 className="text-red-500" />}
+        {/* {type === "delete" && <Trash2Icon className="text-red-500" />} */}
+        {/* {type === "edit" && <Edit2 className="text-red-500" />} */}
+        <Trash2Icon className="text-red-500" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-green-950">
             {heading}
           </AlertDialogTitle>
-          <AlertDialogDescription>{promptMessage}</AlertDialogDescription>
+          <AlertDialogDescription className="text-green-950">{promptMessage}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => action()}>
-            {type === "delete" ? "Continue" : "Update"}
+          <AlertDialogCancel className="bg-green-950 text-slate-300 px-3 py-2 rounded-md hover:bg-green-800 duration-300 hover:text-slate-300">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-red-500 hover:bg-red-500 text-slate-300"
+            onClick={() => action()}
+          >
+            Continue
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
