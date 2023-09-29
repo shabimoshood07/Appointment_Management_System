@@ -61,21 +61,23 @@ export const handleSubmit = async (
   // appointmentId: string
 ) => {
   console.log(formData);
+  const status = formData.get("status")?.toString()
+  const id = formData.get("id")?.toString()
 
-  const data = {};
+  // const data = {};
   // for (const [key, value] of formData.entries()) {
   //   data[key] = value;
   // }
   // console.log(data);
 
-  // const res = await fetch(
-  //   process.env.URL + "/api/appointment/" + `${appointmentId}`,
-  //   {
-  //     method: "PATCH",
-  //     body: JSON.stringify(data),
-  //   }
-  // );
-  // const { message } = await res.json();
-  // revalidatePath("/admin-appointment");
-  // return message;
+  const res = await fetch(
+    process.env.URL + "/api/appointment/" + `${id}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(status),
+    }
+  );
+  const { message } = await res.json();
+  revalidatePath("/admin-appointment");
+  return message;
 };
