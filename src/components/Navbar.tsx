@@ -23,6 +23,7 @@ import {
 import AuthBtnDesktopNav from "./AuthBtnDesktopNav";
 import LogoutBtnDesktopNav from "./LogoutBtnDesktopNav";
 import { navlinks } from "@/lib/navlinks";
+import Notification from "./Notification";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -272,6 +273,7 @@ const Navbar = async () => {
                   </li>
                 );
               })}
+              <Notification />
               <LogoutBtnDesktopNav />
             </ul>
           ) : (

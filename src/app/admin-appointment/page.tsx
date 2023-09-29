@@ -2,6 +2,9 @@ import { columns } from "./Column";
 import { DataTable } from "@/components/data-table";
 import { getAllAppointments } from "@/lib/actions";
 
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const AdminAppointment = async () => {
   const allAppointments = await getAllAppointments();
   const formattedData = allAppointments.map((appt: Appointment) => {

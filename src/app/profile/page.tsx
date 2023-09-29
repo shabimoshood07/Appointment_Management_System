@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { getAllAppointments, getUserAppointments } from "@/lib/actions";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 const page = async () => {
   let allAppointments;
   let userAppointments;

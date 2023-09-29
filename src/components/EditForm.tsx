@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,12 +13,17 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { handleSubmit } from "@/lib/actions";
+import { prisma } from "@/lib/prisma";
+import { updateAppointment } from "@/lib/actions";
 import { Edit2, Trash2Icon } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import { useState } from "react";
 
 export type Appointment = {
   id: string;
@@ -32,8 +38,14 @@ export type Appointment = {
 };
 
 const EditForm = ({ appointment }: { appointment: Appointment }) => {
+  const [open, setOpen] = useState(false);
+  const handleSubmit = async (formData: FormData) => {
+    await updateAppointment(formData, appointment.id);
+    setOpen(!open);
+  };
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger>
         <Edit2 className="text-slate-300" />
       </AlertDialogTrigger>
@@ -43,20 +55,7 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
             Edit Appointment
           </AlertDialogTitle>
         </AlertDialogHeader>
-        <form
-          className="space-y-6"
-          action={handleSubmit}
-          // action={() => {
-          //   const formData = new FormData();
-          //   formData.append("title", appointment.title);
-          //   formData.append("start", appointment.start);
-          //   formData.append("end", appointment.end);
-          //   formData.append("id", appointment.end);
-          //   // Add other form data fields if needed
-
-          //   handleSubmit(formData, appointment.id);
-          // }}
-        >
+        <form className="space-y-6" action={handleSubmit}>
           <div>
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
               Title
@@ -109,15 +108,19 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
               Status: {appointment.status}
             </label>
-            <Select name="status">
-              <SelectTrigger className="w-[180px] mt-2">
-                <SelectValue placeholder="Update Status" />
-              </SelectTrigger>
-              <SelectContent defaultValue={appointment.status}>
-                <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
-                <SelectItem value="CANCELLED">CANCEL</SelectItem>
-              </SelectContent>
-            </Select>
+            {appointment && (
+              <Select name="status">
+                <SelectTrigger className="w-[180px] mt-2">
+                  <SelectValue placeholder="Update Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="CONFIRMED">CONFIRM</SelectItem>
+                    <SelectItem value="CANCELLED">CANCEL</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           <AlertDialogFooter>

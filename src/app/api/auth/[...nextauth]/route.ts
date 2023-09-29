@@ -3,12 +3,9 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { AuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-
-// const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
@@ -20,7 +17,7 @@ export const authOptions: AuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
-    },),
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
@@ -62,7 +59,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true;
+      try {
+        return true;
+      } catch (error) {
+        console.log("callback error", error);
+        return;
+      }
     },
     async redirect({ url, baseUrl }) {
       return baseUrl;
@@ -81,7 +83,7 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/auth/login",
-    error: "/auth/error",
+    // error: "/error",
   },
 };
 

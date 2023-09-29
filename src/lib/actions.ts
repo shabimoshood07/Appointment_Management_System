@@ -56,26 +56,27 @@ export const deleteAppointment = async (appointmentId: string) => {
 //   }
 // };
 
-export const handleSubmit = async (
-  formData: FormData
-  // appointmentId: string
+export const updateAppointment = async (
+  formData: FormData,
+  appointmentId: string
 ) => {
-  console.log(formData);
+  const status = formData.get("status")?.toString() as
+    | "PENDING"
+    | "CONFIRMED"
+    | "CANCELLED";
+  const start = formData.get("start")?.toString();
+  const end = formData.get("end")?.toString();
+  const title = formData.get("title")?.toString();
+  console.log(status, end, start, title, appointmentId);
 
-  const data = {};
-  // for (const [key, value] of formData.entries()) {
-  //   data[key] = value;
-  // }
-  // console.log(data);
+  await prisma.appointment.update({
+    data: {
+      status,
+    },
+    where: {
+      id: appointmentId,
+    },
+  });
 
-  // const res = await fetch(
-  //   process.env.URL + "/api/appointment/" + `${appointmentId}`,
-  //   {
-  //     method: "PATCH",
-  //     body: JSON.stringify(data),
-  //   }
-  // );
-  // const { message } = await res.json();
-  // revalidatePath("/admin-appointment");
-  // return message;
+  revalidatePath("/admin-appointment");
 };
