@@ -24,9 +24,11 @@ import AuthBtnDesktopNav from "./AuthBtnDesktopNav";
 import LogoutBtnDesktopNav from "./LogoutBtnDesktopNav";
 import { navlinks } from "@/lib/navlinks";
 import Notification from "./Notification";
+import { getAllAppointments } from "@/lib/actions";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
+  const appointments = await getAllAppointments();
   return (
     <nav className="border-2 border-slate-200 bg-slate-200 px-2 py-2">
       <div className="flex justify-between items-center w-[98%] md:w-[90%] max-w-6xl mx-auto">
@@ -240,7 +242,7 @@ const Navbar = async () => {
                         href={
                           session.user.role === "USER"
                             ? link.href
-                            : "admin-appointment"
+                            : "/admin-appointment"
                         }
                       >
                         <TooltipProvider delayDuration={100}>
@@ -273,7 +275,7 @@ const Navbar = async () => {
                   </li>
                 );
               })}
-              <Notification />
+              <Notification appointments={appointments} />
               <LogoutBtnDesktopNav />
             </ul>
           ) : (

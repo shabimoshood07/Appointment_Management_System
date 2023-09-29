@@ -1,7 +1,4 @@
 "use server";
-
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 import { prisma } from "./prisma";
 import { revalidatePath, revalidateTag } from "next/cache";
 
@@ -41,20 +38,7 @@ export const deleteAppointment = async (appointmentId: string) => {
     console.log("error", error);
   }
 };
-// export const deleteAppointment = async (appointmentId: string) => {
-//   try {
-//     const session = await getServerSession(authOptions);
-//     await prisma.appointment.delete({
-//       where: {
-//         id: appointmentId,
-//         userId: session?.user.id,
-//       },
-//     });
-//     revalidatePath("/appointment");
-//   } catch (error) {
-//     console.log("error", error);
-//   }
-// };
+
 
 export const updateAppointment = async (
   formData: FormData,
@@ -67,8 +51,6 @@ export const updateAppointment = async (
   const start = formData.get("start")?.toString();
   const end = formData.get("end")?.toString();
   const title = formData.get("title")?.toString();
-  console.log(status, end, start, title, appointmentId);
-
   await prisma.appointment.update({
     data: {
       status,
@@ -76,7 +58,6 @@ export const updateAppointment = async (
     where: {
       id: appointmentId,
     },
-  });
-
+  })
   revalidatePath("/admin-appointment");
 };

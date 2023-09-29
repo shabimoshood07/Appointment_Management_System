@@ -1,10 +1,8 @@
 "use client";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -15,16 +13,14 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { prisma } from "@/lib/prisma";
 import { updateAppointment } from "@/lib/actions";
-import { Edit2, Trash2Icon } from "lucide-react";
-import { revalidatePath } from "next/cache";
-import { useState } from "react";
-
+import { Edit2 } from "lucide-react";
+import { FaSpinner } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { toast } from "./ui/use-toast";
 export type Appointment = {
   id: string;
   title: string;
@@ -38,10 +34,32 @@ export type Appointment = {
 };
 
 const EditForm = ({ appointment }: { appointment: Appointment }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>("");
+
+  useEffect(() => {
+    setStatus("");
+  }, []);
+
   const handleSubmit = async (formData: FormData) => {
-    await updateAppointment(formData, appointment.id);
-    setOpen(!open);
+    setLoading(true);
+    try {
+      await updateAppointment(formData, appointment.id);
+      toast({
+        title: "Success",
+        description: "Appointment updated successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        variant: "destructive",
+      });
+    } finally {
+      setOpen(!open);
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,14 +86,6 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
                 required
                 className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
                 value={appointment.title}
-                readOnly
-              />
-              <input
-                id="id"
-                name="id"
-                type="text"
-                className=" p-2 block w-full rounded-md border-0 py-1.5 text-green-950 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-green-950 focus:ring-2 focus:ring-inset focus:ring-green-950 sm:text-sm sm:leading-6"
-                value={appointment.id}
                 readOnly
               />
             </div>
@@ -116,25 +126,31 @@ const EditForm = ({ appointment }: { appointment: Appointment }) => {
             <label className="block text-sm sm:text-[17px] font-medium leading-6 text-green-950">
               Status: {appointment.status}
             </label>
-            {appointment && (
-              <Select name="status">
-                <SelectTrigger className="w-[180px] mt-2">
-                  <SelectValue placeholder="Update Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="CONFIRMED">CONFIRM</SelectItem>
-                    <SelectItem value="CANCELLED">CANCEL</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          </div>
 
+            <Select name="status" onValueChange={(value) => setStatus(value)}>
+              <SelectTrigger className="w-[180px] mt-2">
+                <SelectValue placeholder="Update Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="CONFIRMED">CONFIRM</SelectItem>
+                  <SelectItem value="CANCELLED">CANCEL</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction type="submit">Update</AlertDialogAction>
-            <button type="submit">Update</button>
+            <AlertDialogCancel className="bg-green-950 text-slate-300 px-3 py-2 rounded-md hover:bg-green-800 duration-300 hover:text-slate-300">
+              Cancel
+            </AlertDialogCancel>
+            {status !== "" && (
+              <button
+                type="submit"
+                className="bg-green-950 text-slate-300 px-3 py-2 rounded-md hover:bg-green-800 duration-300"
+              >
+                {loading ? <FaSpinner /> : "Update"}
+              </button>
+            )}
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
